@@ -81,8 +81,7 @@ class CometServer(object, resource.Resource):
             held_connection.send_cache_headers()
             held_connection.delayed_reply(result)
             self.held_connection_channel.remove_held_connection_id(held_connection.id)
-            
-            
+
         return connection.success({ "message_id": message_id })
     
     

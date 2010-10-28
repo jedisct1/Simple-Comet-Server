@@ -17,9 +17,9 @@ class Client(object):
         
     def ping(self):
         if self._timeout_delayed_call == None or not self._timeout_delayed_call.active():
-            self._timeout_delayed_call = reactor.callLater(CLIENT_TIMEOUT, self.timeout)
+            self._timeout_delayed_call = reactor.callLater(CLIENT_LOGOUT_AFTER, self.timeout)
         else:
-            self._timeout_delayed_call.reset(CLIENT_TIMEOUT)
+            self._timeout_delayed_call.reset(CLIENT_LOGOUT_AFTER)
         
             
     def cancel_timeout_delayed_call(self):
