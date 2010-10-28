@@ -109,8 +109,7 @@ class Connection(object):
     def success(self, obj = { }, return_code = 1, error_message = ""):
         assert(return_code > 0)
         obj["return_code"] = return_code
-        obj["error_message"] = error_message        
-        self.send_cache_headers()        
+        obj["error_message"] = error_message
         return self.render(obj)
 
     
