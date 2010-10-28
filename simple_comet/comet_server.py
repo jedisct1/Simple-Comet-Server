@@ -163,7 +163,6 @@ class CometServer(object, resource.Resource):
 
     
     def connection_finished(self, failure, connection_id):
-        print("Disconnected held connection %r" % connection_id)
         self.held_connection_channel.remove_held_connection_id(connection_id)
     
         
@@ -177,7 +176,6 @@ class CometServer(object, resource.Resource):
     
     
     def client_timeout_cb(self, client, teardown_cb):
-        print("%r timed out" % client.id)
         self.client_channel.remove_client_id(client.id)     
         teardown_cb()
     

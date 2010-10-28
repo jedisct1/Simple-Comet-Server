@@ -1,5 +1,9 @@
 
 from config import *
+from wsgiref.handlers import format_date_time
+from datetime import datetime, timedelta
+from time import mktime
+
 
 try:
     import json
@@ -57,6 +61,19 @@ class Connection(object):
         return self.format
     
     
+    def send_cache_headers(self):
+        cache_age_s = str(HTTP_CACHE_AGE)
+        self._request.setHeader("Cache-Control",
+          "private, must-revalidate, proxy-revalidate, " \
+          "max-age=" + cache_age_s + ", " \
+          "s-max-age=" + cache_age_s + ", " \
+          "stale-while-revalidate=" + cache_age_s + ", " \
+          "stale-if-error=86400")
+        self._request.setHeader("Pragma", "cache")
+        expire_tt = (datetime.now() + timedelta(seconds = HTTP_CACHE_AGE)).timetuple()
+        expire_ts = mktime(expire_tt)
+        self._request.setHeader("Expires", format_date_time(expire_ts))
+    
     def render(self, obj):
         json_obj = json.dumps(obj)
         if self.format == "jsonp":
@@ -79,7 +96,7 @@ class Connection(object):
         else:
             assert(DEFAULT_FORMAT == "json")
             self._request.setHeader("Content-Type", "application/json")
-            
+        
         return json_obj
 
 
@@ -92,7 +109,8 @@ class Connection(object):
     def success(self, obj = { }, return_code = 1, error_message = ""):
         assert(return_code > 0)
         obj["return_code"] = return_code
-        obj["error_message"] = error_message
+        obj["error_message"] = error_message        
+        self.send_cache_headers()        
         return self.render(obj)
 
     
