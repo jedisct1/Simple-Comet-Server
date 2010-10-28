@@ -73,7 +73,8 @@ class Connection(object):
         expire_tt = (datetime.now() + timedelta(seconds = HTTP_CACHE_AGE)).timetuple()
         expire_ts = mktime(expire_tt)
         self._request.setHeader("Expires", format_date_time(expire_ts))
-    
+
+        
     def render(self, obj):
         json_obj = json.dumps(obj)
         if self.format == "jsonp":

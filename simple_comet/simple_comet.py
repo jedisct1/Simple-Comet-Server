@@ -4,6 +4,7 @@ from twisted.internet import reactor
 from twisted.web import server, resource, http
 from comet_server import CometServer
 
+
 def main():
     comet_server = CometServer(reactor)
     site = server.Site(comet_server)

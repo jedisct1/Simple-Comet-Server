@@ -6,6 +6,7 @@ from client import Client
 class ExistingChannelError(Exception):
     pass
 
+
 class ExistingClientError(Exception):
     pass
 
@@ -16,7 +17,8 @@ class ClientChannel(object):
         self._client_id_to_client = dict()
         self._channel_id_to_clients_ids = dict()
         self._client_id_to_channels_ids = dict()    
-    
+
+        
     def register_channel_id(self, channel_id):
         if channel_id in self._channel_id_to_channel:
             raise ExistingChannelError("Channel already exists")
