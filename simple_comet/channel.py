@@ -7,13 +7,17 @@ class Channel(object):
     id = property(lambda self: self._id)
     
     
-    def __init__(self, id):
+    def __init__(self, id, use_sessions = False):
         self._id = id
-        self.messages = deque()            
+        self.use_sessions = use_sessions
+        self.messages = deque()
         
     
     def push_message_content(self, message_id, content):
-        message = { "id": message_id, "ts": int(time.time()), "content": content }      
+        message = { "id": message_id, "ts": int(time.time()), "content": content }
+        while len(self.messages) >= DEFAULT_MAX_MESSAGES_PER_CHANNEL:
+            self.messages.pop()
+        
         self.messages.appendleft(message)
 
         

@@ -16,7 +16,7 @@ class ClientChannel(object):
         self._channel_id_to_channel = dict()
         self._client_id_to_client = dict()
         self._channel_id_to_clients_ids = dict()
-        self._client_id_to_channels_ids = dict()    
+        self._client_id_to_channels_ids = dict()
 
         
     def register_channel_id(self, channel_id):

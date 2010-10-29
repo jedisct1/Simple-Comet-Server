@@ -58,8 +58,10 @@ class CometServer(object, resource.Resource):
             if not "channel_id" in request.args:
                 return connection.error(-1, "Missing channel id")
                         
-            channel_id = request.args["channel_id"][0]          
-            return self.register_channel_id(connection, channel_id)
+            channel_id = request.args["channel_id"][0]
+            use_sessions = "use_sessions" in request.args
+            
+            return self.register_channel_id(connection, channel_id, use_sessions)
 
         try:
             channel = self.client_channel.channel_id_to_channel(channel_id)
