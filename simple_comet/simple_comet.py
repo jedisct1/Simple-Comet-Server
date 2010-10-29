@@ -6,9 +6,10 @@ from comet_server import CometServer
 
 
 def main():
-    comet_server = CometServer(reactor)
-    site = server.Site(comet_server, timeout = CLIENT_TIMEOUT)
-    reactor.listenTCP(DEFAULT_PORT, site)
+    config = Config()
+    comet_server = CometServer(reactor, config)
+    site = server.Site(comet_server, timeout = config.http_timeout)
+    reactor.listenTCP(config.http_port, site)
     reactor.run()
 
 

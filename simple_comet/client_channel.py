@@ -28,11 +28,11 @@ class ClientChannel(object):
         self._channel_id_to_clients_ids[channel_id] = set()
         
         
-    def register_client_id(self, client_id, timeout_cb):
+    def register_client_id(self, comet_server, client_id, timeout_cb):
         if client_id in self._client_id_to_client:
             raise ExistingClientError("Client already exists")
         
-        client = Client(client_id, timeout_cb)
+        client = Client(comet_server, client_id, timeout_cb)
         self._client_id_to_client[client_id] = client
         self._client_id_to_channels_ids[client_id] = set()
 

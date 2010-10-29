@@ -5,9 +5,11 @@ from twisted.internet import reactor
 
 class Client(object):
     id = property(lambda self: self._id)
+    comet_server = property(lambda self: self._comet_server)
     
     
-    def __init__(self, id, timeout_cb):
+    def __init__(self, comet_server, id, timeout_cb):
+        self._comet_server = comet_server
         self._id = id
         self._timeout_delayed_call = None
         self.timeout_cb = timeout_cb
@@ -16,10 +18,11 @@ class Client(object):
     
         
     def ping(self):
+        config = self.comet_server.config
         if self._timeout_delayed_call == None or not self._timeout_delayed_call.active():
-            self._timeout_delayed_call = reactor.callLater(CLIENT_LOGOUT_AFTER, self.timeout)
+            self._timeout_delayed_call = reactor.callLater(config.client_session_timeout, self.timeout)
         else:
-            self._timeout_delayed_call.reset(CLIENT_LOGOUT_AFTER)
+            self._timeout_delayed_call.reset(config.client_session_timeout)
         
             
     def cancel_timeout_delayed_call(self):

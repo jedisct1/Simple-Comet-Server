@@ -25,12 +25,14 @@ class CometServer(object, resource.Resource):
     isLeaf = True
 
     current_message_id = property(lambda self: self._current_message_id)
+    config = property(lambda self: self._config)
+        
     
-    
-    def __init__(self, reactor):
+    def __init__(self, reactor, config):
+        self._config = config
         self.client_channel = ClientChannel()
         self.held_connection_channel = HeldConnectionChannel()
-        self._current_message_id = int(time.time() * MESSAGES_PER_SECOND)
+        self._current_message_id = int(time.time() * config.max_messages_per_second)
         self._current_connection_id = 0
         self._reactor = reactor
         self.comet_server = self
@@ -48,7 +50,7 @@ class CometServer(object, resource.Resource):
                 
     def render_POST(self, request):
         connection_id = self.pop_connection_id()
-        connection = Connection(request, connection_id)
+        connection = Connection(self, request, connection_id)
         try:            
             (channel_id, format) = connection.get_channel_id_and_format()       
         except ValueError as e:
@@ -91,7 +93,11 @@ class CometServer(object, resource.Resource):
         request = connection.request
         since = 0
         if "since" in request.args:
-            since = int(request.args["since"][0])           
+            try:
+                since = int(request.args["since"][0])
+            except ValueError:
+                pass
+            
             since = min(since, self._current_message_id)
             
         if not "client_id" in request.args:
@@ -144,9 +150,9 @@ class CometServer(object, resource.Resource):
 
     def render_GET(self, request):
         connection_id = self.pop_connection_id()        
-        connection = Connection(request, connection_id)
-        try:            
-            format = connection.get_format(HANDSHAKE_URI_PATH)
+        connection = Connection(self, request, connection_id)
+        try:
+            format = connection.get_format(self.config.handshake_uri_path)
         except ValueError as e:
             return connection.error(-1, str(e))
         
@@ -158,7 +164,7 @@ class CometServer(object, resource.Resource):
         except ValueError as e:
             return connection.error(-1, str(e))     
 
-        channels_ids = channels_ids_s.split(CHANNELS_SEP)
+        channels_ids = channels_ids_s.split(self.config.channels_sep)
         if not channels_ids:
             return connection.error(-2, "No channels")
         
@@ -186,7 +192,7 @@ class CometServer(object, resource.Resource):
     def handshake(self, connection):
         client_id = str("1")
         try:
-            self.client_channel.register_client_id(client_id, self.client_timeout_cb)
+            self.client_channel.register_client_id(self, client_id, self.client_timeout_cb)
         except ExistingClientError as e:
             return connection.error(-2, str(e))
         

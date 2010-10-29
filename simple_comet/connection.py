@@ -3,6 +3,7 @@ from config import *
 from wsgiref.handlers import format_date_time
 from datetime import datetime, timedelta
 from time import mktime
+import re
 
 
 try:
@@ -12,12 +13,13 @@ except ImportError:
 
 
 class Connection(object):
-    id = property(lambda self: self._id)
-        
+    id = property(lambda self: self._id)        
     request = property(lambda self: self._request)
+    comet_server = property(lambda self: self._comet_server)
     
     
-    def __init__(self, request, id):
+    def __init__(self, comet_server, request, id):
+        self._comet_server = comet_server
         self._request = request
         self.format = None
         self._id = id
@@ -25,10 +27,11 @@ class Connection(object):
     
     def get_channel_id_and_format(self):
         path = self._request.path
-        if not path.startswith(CHANNELS_URI_PATH):
-            raise ValueError("Missing %r prefix" % CHANNELS_URI_PATH)
+        channels_uri_path = self.comet_server.config.channels_uri_path
+        if not path.startswith(channels_uri_path):
+            raise ValueError("Missing %r prefix" % channels_uri_path)
         
-        channel_id_and_format_s = path[len(CHANNELS_URI_PATH):]
+        channel_id_and_format_s = path[len(channels_uri_path):]
         if channel_id_and_format_s.endswith(".json"):
             channel_id = channel_id_and_format_s[: -len(".json")]
             self.format = "json"            
@@ -76,14 +79,15 @@ class Connection(object):
 
         
     def render(self, obj):
+        config = self.comet_server.config
         json_obj = json.dumps(obj)
         if self.format == "jsonp":
             self._request.setHeader("Content-Type", "application/javascript")
-            jsonp_cb = DEFAULT_JSONP_CB
+            jsonp_cb = config.default_jsonp_cb
             if "cb" in self._request.args:
                 (jsonp_cb,) = self._request.args["cb"]
                 
-            if jsonp_cb.find(JSONP_REQUIRED_SUBSTR) < 0:
+            if jsonp_cb.find(config.jsonp_required_substr) < 0:
                 return "/* incomplete JSONP callback name */"
             
             if not re.search("^[a-z_]+[a-z0-9_.]*$", jsonp_cb, re.IGNORECASE):
@@ -95,7 +99,7 @@ class Connection(object):
                 
             return jsonp_ret            
         else:
-            assert(DEFAULT_FORMAT == "json")
+            assert(config.default_format == "json")
             self._request.setHeader("Content-Type", "application/json")
         
         return json_obj
