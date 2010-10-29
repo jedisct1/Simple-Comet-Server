@@ -63,7 +63,20 @@ class CometServer(object, resource.Resource):
             channel_id = request.args["channel_id"][0]
             use_sessions = "use_sessions" in request.args
             
-            return self.register_channel_id(connection, channel_id, use_sessions)
+            if "max_messages" in request.args:
+                try:
+                    max_messages = int(request.args["max_messages"][0])
+                    if max_messages < 1:
+                        raise ValueError("Channels should at least store one message")
+                    
+                except ValueError:
+                    return connection.error(-1, "Invalid max messages value")
+            else:
+                max_messages = self.config.default_max_messages_per_channel
+            
+            return self.register_channel_id(connection = connection,
+                channel_id = channel_id, max_messages = max_messages,
+                use_sessions = use_sessions)
 
         try:
             channel = self.client_channel.channel_id_to_channel(channel_id)
@@ -175,9 +188,9 @@ class CometServer(object, resource.Resource):
         self.held_connection_channel.remove_held_connection_id(connection_id)
     
         
-    def register_channel_id(self, connection, channel_id, use_sessions):
+    def register_channel_id(self, connection, channel_id, max_messages, use_sessions):
         try:
-            self.client_channel.register_channel_id(channel_id, use_sessions)
+            self.client_channel.register_channel_id(channel_id, max_messages, use_sessions)
         except ExistingChannelError as e:
             return connection.error(-2, str(e))
         

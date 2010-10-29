@@ -7,6 +7,7 @@ class Config(object):
 	jsonp_required_substr = "_JSONP_"
 	default_jsonp_cb = jsonp_required_substr + "comet_cb"
 	http_cache_age = 86400 * 90
+	default_max_messages_per_channel = 10
 	
 	def __init__(self):
 		self._http_port = 8080
@@ -68,6 +69,3 @@ class Config(object):
 	@quote_jsonp.setter
 	def quote_jsonp(self, value):
 		self._quote_jsonp = value
-
-				
-DEFAULT_MAX_MESSAGES_PER_CHANNEL = 5

@@ -39,7 +39,7 @@ class Connection(object):
             channel_id = channel_id_and_format_s[: -len(".jsonp")]
             self.format = "jsonp"           
         else:
-            raise ValueError("unknown output format")
+            raise ValueError("Unknown output format")
         
         if channel_id != "":
             assert(channel_id[0] == "/")
@@ -57,7 +57,7 @@ class Connection(object):
         elif path == wanted_path + ".jsonp":
             self.format = "jsonp"
         elif path.startswith(wanted_path):
-            raise ValueError("unknown output format")
+            raise ValueError("Unknown output format")
         else:
             return None
         

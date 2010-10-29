@@ -19,11 +19,11 @@ class ClientChannel(object):
         self._client_id_to_channels_ids = dict()
 
         
-    def register_channel_id(self, channel_id, use_sessions):
+    def register_channel_id(self, channel_id, max_messages, use_sessions):
         if channel_id in self._channel_id_to_channel:
             raise ExistingChannelError("Channel already exists")
 
-        channel = Channel(channel_id, use_sessions)
+        channel = Channel(channel_id, max_messages, use_sessions)
         self._channel_id_to_channel[channel_id] = channel
         self._channel_id_to_clients_ids[channel_id] = set()
         
