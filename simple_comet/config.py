@@ -5,7 +5,8 @@ class Config(object):
 	channels_sep = "|"
 	default_format = "json"
 	jsonp_required_substr = "_JSONP_"
-	default_jsonp_cb = jsonp_required_substr + "comet_cb"	
+	default_jsonp_cb = jsonp_required_substr + "comet_cb"
+	http_cache_age = 86400 * 90
 	
 	def __init__(self):
 		self._http_port = 8080
@@ -69,5 +70,4 @@ class Config(object):
 		self._quote_jsonp = value
 
 				
-HTTP_CACHE_AGE = 86400 * 90
 DEFAULT_MAX_MESSAGES_PER_CHANNEL = 5

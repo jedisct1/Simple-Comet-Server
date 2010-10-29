@@ -65,7 +65,8 @@ class Connection(object):
     
     
     def send_cache_headers(self):
-        cache_age_s = str(HTTP_CACHE_AGE)
+        http_cache_age = self.comet_server.config.http_cache_age
+        cache_age_s = str(http_cache_age)
         self._request.setHeader("Cache-Control",
           "private, must-revalidate, proxy-revalidate, " \
           "max-age=" + cache_age_s + ", " \
@@ -73,7 +74,7 @@ class Connection(object):
           "stale-while-revalidate=" + cache_age_s + ", " \
           "stale-if-error=86400")
         self._request.setHeader("Pragma", "cache")
-        expire_tt = (datetime.now() + timedelta(seconds = HTTP_CACHE_AGE)).timetuple()
+        expire_tt = (datetime.now() + timedelta(seconds = http_cache_age)).timetuple()
         expire_ts = mktime(expire_tt)
         self._request.setHeader("Expires", format_date_time(expire_ts))
 
