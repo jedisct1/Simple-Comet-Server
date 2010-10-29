@@ -1,11 +1,19 @@
+
 from nose.tools import *
-import simple_comet
+from simple_comet import main
+import os
+import signal
+
+server_pid = 0
 
 def setup():
-	pass
+	server_pid = os.fork()
+	if child_pid != 0:
+		main()
+		exit(0)
 
 def teardown():
-	pass
+	os.kill(server_pid, signal.SIG_TERM)
 
 def test_basic():
 	pass
