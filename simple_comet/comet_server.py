@@ -169,9 +169,9 @@ class CometServer(object, resource.Resource):
         self.held_connection_channel.remove_held_connection_id(connection_id)
     
         
-    def register_channel_id(self, connection, channel_id):
+    def register_channel_id(self, connection, channel_id, use_sessions):
         try:
-            self.client_channel.register_channel_id(channel_id)         
+            self.client_channel.register_channel_id(channel_id, use_sessions)
         except ExistingChannelError as e:
             return connection.error(-2, str(e))
         
