@@ -94,7 +94,7 @@ class Connection(object):
                 return "/* invalid JSONP callback name */"
 
             jsonp_ret = jsonp_cb + "(" + json_obj + ");"
-            if QUOTE_JSONP:
+            if config.quote_jsonp:
                 jsonp_ret = "/*-secure- " + jsonp_ret + " */"
                 
             return jsonp_ret            

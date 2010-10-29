@@ -12,6 +12,7 @@ class Config(object):
 		self._http_timeout = 30
 		self._client_session_timeout = 60
 		self._max_messages_per_second = 100000
+		self._quote_jsonp = False
 
 		
 	@property
@@ -54,9 +55,19 @@ class Config(object):
 	
 	@max_messages_per_second.setter
 	def max_messages_per_second(self, value):
-		assert(value in range(0, 65536))
+		assert(value > 0)
 		self._max_messages_per_second = value
-						
-QUOTE_JSONP = False
+
+
+	@property
+	def quote_jsonp(self):
+		return self._quote_jsonp
+
+	
+	@quote_jsonp.setter
+	def quote_jsonp(self, value):
+		self._quote_jsonp = value
+
+				
 HTTP_CACHE_AGE = 86400 * 90
 DEFAULT_MAX_MESSAGES_PER_CHANNEL = 5
