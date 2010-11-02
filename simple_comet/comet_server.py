@@ -196,6 +196,21 @@ class CometServer(object, resource.Resource):
             return connection.error(-2, "No channels")
         
         return self.handle_channels_read(connection, channels_ids)
+    
+    
+    def render_DELETE(self, request):
+        connection_id = self.pop_connection_id()
+        connection = Connection(self, request, connection_id)
+        try:
+            (channel_id, format) = connection.get_channel_id_and_format()
+        except ValueError as e:
+            return connection.error(-1, str(e))     
+        
+        removed = self.remove_channel_id(channel_id)
+        
+        return connection.success({ "channel_id": channel_id,
+                                    "removed": removed },
+                                    return_code = int(removed) + 1)
 
     
     def connection_finished(self, failure, connection_id):
@@ -211,8 +226,18 @@ class CometServer(object, resource.Resource):
         return connection.success({ "channel_id": channel_id })
     
     
+    def remove_channel_id(self, channel_id):
+        try:
+            channel = self.client_channel.channel_id_to_channel(channel_id)
+        except KeyError:
+            return False
+        
+        self.client_channel.remove_channel_id(channel_id)
+        return True
+    
+    
     def client_timeout_cb(self, client, teardown_cb):
-        self.client_channel.remove_client_id(client.id)     
+        self.client_channel.remove_client_id(client.id)
         teardown_cb()
     
         

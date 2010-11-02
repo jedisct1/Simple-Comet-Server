@@ -39,3 +39,16 @@ class HeldConnectionChannel(object):
         return [ self._connection_id_to_connection[connection_id] \
                  for connection_id \
                  in self._channel_id_to_held_connections[channel_id] ]
+
+    def remove_channel_id(self, channel_id):
+        if channel_id not in self._channel_id_to_held_connections:
+            return
+        
+        held_connections = self._channel_id_to_held_connections[channel_id]
+        for connection_id in \
+            [ held_connection.id for held_connection in held_connections ]:
+            self._held_connection_id_to_channels_ids.remove(channel_id)
+        
+        self._channel_id_to_held_connections.pop(channel_id)
+        
+    

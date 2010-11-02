@@ -57,3 +57,12 @@ class ClientChannel(object):
         self._client_id_to_client.pop(client_id)
         self._client_id_to_channels_ids.pop(client_id)
         
+
+    def remove_channel_id(self, channel_id):
+        for client_id in self._channel_id_to_clients_ids[channel_id]:
+            self._client_id_to_channels_ids[client_id].remove(channel_id)
+        
+        self._channel_id_to_channel.pop(channel_id)
+        self._channel_id_to_clients_ids.pop(channel_id)
+
+        
