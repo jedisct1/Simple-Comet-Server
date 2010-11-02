@@ -1,4 +1,8 @@
 
+from getopt import getopt, GetoptError
+import sys
+
+
 class Config(object):
 	channels_uri_path = "/channels"
 	handshake_uri_path = "/handshake"
@@ -12,14 +16,52 @@ class Config(object):
 	anonymous_client_id = "anonymous"
 	
 	
-	def __init__(self):
+	def __init__(self, args):
 		self._http_port = 8080
 		self._http_timeout = 30
 		self._client_session_timeout = 60
 		self._max_messages_per_second = 100000
 		self._quote_jsonp = False
+		opts = [ "http-port=", "http-timeout=", "session-timeout=",
+		         "max-messages-per-channel=", "quote-jsonp" ]
+		try:
+			optlist, args = getopt(args, None, opts)
+		except GetoptError:
+			self.help()
+			
+		for opt in optlist:
+			self.parse_opt(opt)
 
+
+	def help(self):
+		print """
+Usage: simple_comet
+            
+--http-port=<HTTP server port>
+--http-timeout=<HTTP timeout in seconds>
+--session-timeout=<session timeout in seconds>
+--messages-per-channel=<default max messages per channel>
+--quote-jsonp
+"""
+		sys.exit(0)
 		
+
+	def parse_opt(self, config, opt):
+		switch, arg = opt
+		if switch == "--http-port":
+			config.http_port = int(arg)
+		elif switch == "--http-timeout":
+			config.http_timeout = int(arg)
+		elif switch == "--session-timeout":
+			config.session_timeout = int(arg)
+		elif switch == "--max-messages_per_channel":
+			config.max_messages_per_channel = int(arg)
+		elif switch == "--quote-jsonp":
+			config.quote_jsonp = True
+		else:
+			assert(False)			
+			
+							
 	@property
 	def http_port(self):
 		return self._http_port
@@ -72,3 +114,4 @@ class Config(object):
 	@quote_jsonp.setter
 	def quote_jsonp(self, value):
 		self._quote_jsonp = value
+
