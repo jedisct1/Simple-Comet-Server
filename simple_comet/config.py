@@ -2,12 +2,15 @@
 class Config(object):
 	channels_uri_path = "/channels"
 	handshake_uri_path = "/handshake"
+	clients_uri_path = "/clients"	
 	channels_sep = "|"
 	default_format = "json"
 	jsonp_required_substr = "_JSONP_"
 	default_jsonp_cb = jsonp_required_substr + "comet_cb"
 	http_cache_age = 86400 * 90
 	default_max_messages_per_channel = 10
+	anonymous_client_id = "anonymous"
+	
 	
 	def __init__(self):
 		self._http_port = 8080

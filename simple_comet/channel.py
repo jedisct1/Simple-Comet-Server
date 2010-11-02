@@ -18,7 +18,8 @@ class Channel(object):
 
     
     def push_message_content(self, message_id, content):
-        message = { "id": message_id, "ts": int(time.time()), "content": content }
+        message = { "id": message_id, "ts": int(time.time()),
+                    "content": content }
         while len(self.messages) >= self.max_messages:
             self.messages.pop()
         

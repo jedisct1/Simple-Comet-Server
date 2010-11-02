@@ -50,9 +50,17 @@ class CometServer(object, resource.Resource):
                 
     def render_POST(self, request):
         connection_id = self.pop_connection_id()
-        connection = Connection(self, request, connection_id)
-        try:            
-            (channel_id, format) = connection.get_channel_id_and_format()       
+        connection = Connection(self, request, connection_id)        
+        try:
+            format = connection.get_format(self.config.clients_uri_path)
+        except ValueError as e:
+            return connection.error(-1, str(e))
+        
+        if format:
+            return self.register_client(connection)
+        
+        try:
+            (channel_id, format) = connection.get_channel_id_and_format()
         except ValueError as e:
             return connection.error(-1, str(e))
         
@@ -61,7 +69,9 @@ class CometServer(object, resource.Resource):
                 return connection.error(-1, "Missing channel id")
                         
             channel_id = request.args["channel_id"][0]
-            use_sessions = "use_sessions" in request.args
+            use_sessions = False
+            if "use_sessions" in request.args:
+                use_sessions = bool(request.args["use_sessions"][0])
             
             if "max_messages" in request.args:
                 try:
@@ -124,20 +134,24 @@ class CometServer(object, resource.Resource):
             return connection.error(-3, "Unregistered client_id")
 
         client.ping()
-        channels_data = dict()
+        authorized_channels_ids = list()
         for channel_id in channels_ids:
             try:
                 channel = self.client_channel.channel_id_to_channel(channel_id)
             except KeyError:
-                channels_data[channel_id] = list()
                 continue
             
+            if channel.use_sessions != False and \
+                client_id == self.config.anonymous_client_id:
+                continue
+            
+            authorized_channels_ids.append(channel_id)
             self.client_channel.register_client_id_for_channel_id(client_id, channel_id)
         
         channels_messages = dict()
         empty = True
 
-        for channel_id in channels_ids:
+        for channel_id in authorized_channels_ids:
             try:
                 channel = self.client_channel.channel_id_to_channel(channel_id)
             except KeyError:
@@ -154,11 +168,11 @@ class CometServer(object, resource.Resource):
                                         "last_id": self.current_message_id })
                                         
         self.held_connection_channel. \
-            register_held_connection_for_channels_ids(connection, channels_ids)
+            register_held_connection_for_channels_ids(connection, authorized_channels_ids)
 
         request.notifyFinish().addBoth(self.connection_finished, connection.id)
             
-        return NOT_DONE_YET        
+        return NOT_DONE_YET
         
 
     def render_GET(self, request):
@@ -203,7 +217,7 @@ class CometServer(object, resource.Resource):
     
         
     def handshake(self, connection):
-        client_id = str("1")
+        client_id = self.config.anonymous_client_id
         try:
             self.client_channel.register_client_id(self, client_id, self.client_timeout_cb)
         except ExistingClientError as e:
@@ -211,3 +225,17 @@ class CometServer(object, resource.Resource):
         
         return connection.success({ "client_id": client_id })
         
+
+    def register_client(self, connection):
+        request = connection.request
+        if not "client_id" in request.args:
+            return connection.error(-1, "Missing client id")
+        client_id = request.args["client_id"][0]
+        
+        try:
+            self.client_channel.register_client_id(self, client_id, self.client_timeout_cb)
+        except ExistingClientError as e:
+            return connection.error(-2, str(e))
+        
+        return connection.success({ "client_id": client_id })
+    
