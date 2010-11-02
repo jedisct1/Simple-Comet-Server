@@ -237,7 +237,12 @@ class CometServer(object, resource.Resource):
     
     
     def client_timeout_cb(self, client, teardown_cb):
-        self.client_channel.remove_client_id(client.id)
+        empty_channels_ids = \
+          self.client_channel.remove_client_id_and_return_empty_channels_ids(client.id)
+        if empty_channels_ids:
+            for channel_id in empty_channels_ids:
+                self.client_channel.remove_channel_id(channel_id)
+        
         teardown_cb()
     
         

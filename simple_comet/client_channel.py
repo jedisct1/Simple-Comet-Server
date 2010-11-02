@@ -50,13 +50,17 @@ class ClientChannel(object):
         self._client_id_to_channels_ids[client_id].add(channel_id)
 
     
-    def remove_client_id(self, client_id):
+    def remove_client_id_and_return_empty_channels_ids(self, client_id):
+        empty_channels = set()
         for channel_id in self._client_id_to_channels_ids[client_id]:
             self._channel_id_to_clients_ids[channel_id].remove(client_id)
+            if len(self._channel_id_to_clients_ids[channel_id]) == 0:
+                empty_channels.add(channel_id)
         
         self._client_id_to_client.pop(client_id)
         self._client_id_to_channels_ids.pop(client_id)
-        
+        return empty_channels
+
 
     def remove_channel_id(self, channel_id):
         for client_id in self._channel_id_to_clients_ids[channel_id]:
@@ -65,4 +69,5 @@ class ClientChannel(object):
         self._channel_id_to_channel.pop(channel_id)
         self._channel_id_to_clients_ids.pop(channel_id)
 
-        
+    
+    
