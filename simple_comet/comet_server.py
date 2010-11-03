@@ -191,9 +191,11 @@ class CometServer(object, resource.Resource):
         except ValueError as e:
             return connection.error(-1, str(e))     
 
+        if not channels_ids_s:
+            return connection.error(-2, "No channels")
         channels_ids = channels_ids_s.split(self.config.channels_sep)
         if not channels_ids:
-            return connection.error(-2, "No channels")
+            return connection.error(-2, "Empty channels list")
         
         return self.handle_channels_read(connection, channels_ids)
     
