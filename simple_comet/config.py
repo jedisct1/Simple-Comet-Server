@@ -25,7 +25,7 @@ class Config(object):
 		opts = [ "http-port=", "http-timeout=", "session-timeout=",
 		         "max-messages-per-channel=", "quote-jsonp" ]
 		try:
-			optlist, args = getopt(args, None, opts)
+			optlist, args = getopt(args, list(), opts)
 		except GetoptError:
 			self.help()
 			
