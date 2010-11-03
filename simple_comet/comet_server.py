@@ -251,7 +251,9 @@ class CometServer(object, resource.Resource):
         try:
             self.client_channel.register_client_id(self, client_id, self.client_timeout_cb)
         except ExistingClientError as e:
-            return connection.error(-2, str(e))
+            pass
+        except Exception as e:
+            return connection.error(-2, str(e))            
         
         return connection.success({ "client_id": client_id })
         
