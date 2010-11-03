@@ -1,5 +1,5 @@
 
-from simple_comet.server import main
+from simple_comet import main
 
 
 __all__ = [ "main" ]

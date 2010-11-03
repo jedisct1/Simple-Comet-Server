@@ -8,13 +8,16 @@ server_pid = 0
 
 def setup():
 	server_pid = os.fork()
-	if child_pid != 0:
+	if server_pid == 0:
 		main()
 		exit(0)
 
+		
 def teardown():
-	os.kill(server_pid, signal.SIG_TERM)
+	os.kill(server_pid, signal.SIGTERM)
+	pass
 
+	
 def test_basic():
 	pass
 
