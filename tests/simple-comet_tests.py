@@ -12,6 +12,7 @@ from simple_comet import main
 
 BASE_URI = "http://127.0.0.1:8080"
 
+
 def setup():
     pass
 
@@ -115,12 +116,20 @@ def test_read_sess_content():
 def test_delete_chan():
     def _(res):
         assert(res["return_code"] > 0)
+        assert(res["removed"] == True)
 
     _issue_command("/channels/chan.json", None, _, "DELETE")
     _issue_command("/channels/chan-sess.json", None, _, "DELETE")    
 
 
-    
+def test_delete_nonexistent_chan():
+    def _(res):
+        assert(res["return_code"] > 0)
+        assert(res["removed"] == False)        
+
+    _issue_command("/channels/nonexistent.json", None, _, "DELETE")
+
+
     
 
         
