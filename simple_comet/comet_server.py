@@ -123,10 +123,13 @@ class CometServer(object, resource.Resource):
             
             since = min(since, self._current_message_id)
             
-        if not "client_id" in request.args:
-            return connection.error(-1, "Missing client_id")
-        
-        (client_id, ) = request.args["client_id"]
+        if "client_id" in request.args:            
+            (client_id, ) = request.args["client_id"]
+            if not client_id:
+                return connection.error(-1, "Missing client_id")
+            
+        else:
+            client_id = self.config.anonymous_client_id
         
         try:
             client = self.client_channel.client_id_to_client(client_id)
