@@ -72,7 +72,7 @@ def test_read_content():
     def _(res):
         assert(res["return_code"] > 0)
         
-    _issue_command("/channels/chan.json?client_id=anonymous", None, _)
+    _issue_command("/channels/chan.json", None, _)
     
     
 def test_push_sess_content():
