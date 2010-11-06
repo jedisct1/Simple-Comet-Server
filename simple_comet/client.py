@@ -9,7 +9,7 @@ class Client(object):
     comet_server = property(lambda self: self._comet_server)
     
     
-    def __init__(self, comet_server, id, meta = None, timeout_cb):
+    def __init__(self, comet_server, id, timeout_cb, meta = None):
         self._comet_server = comet_server
         self._id = id
         self._meta = meta        

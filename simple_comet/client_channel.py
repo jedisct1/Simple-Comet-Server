@@ -18,6 +18,13 @@ class ClientChannel(object):
         self._channel_id_to_clients_ids = dict()
         self._client_id_to_channels_ids = dict()
 
+
+    channel_id_to_clients_ids = \
+        property(lambda self: self._channel_id_to_clients_ids)
+
+    client_id_to_channel_id_to_channels_ids = \
+        property(lambda self: self._client_id_to_channels_ids)
+        
         
     def register_channel_id(self, channel_id, max_messages, use_sessions):
         if channel_id in self._channel_id_to_channel:
@@ -33,7 +40,7 @@ class ClientChannel(object):
             raise ExistingClientError("Client already exists")
         
         client = Client(comet_server = comet_server,
-            client_id = client_id, meta = None, timeout_cb = timeout_cb)
+            id = client_id, timeout_cb = timeout_cb, meta = None)
         self._client_id_to_client[client_id] = client
         self._client_id_to_channels_ids[client_id] = set()
 

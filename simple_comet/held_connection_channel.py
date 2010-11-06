@@ -6,6 +6,10 @@ class HeldConnectionChannel(object):
         self._connection_id_to_connection = dict()
 
         
+    held_connections_count = \
+        property(lambda self: len(self._held_connection_id_to_channels_ids))
+        
+        
     def register_held_connection_for_channels_ids(self, connection, channels_ids):
         connection_id = connection.id
         self._connection_id_to_connection[connection_id] = connection

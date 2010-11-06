@@ -5,13 +5,15 @@ import sys
 
 class Config(object):
 	channels_uri_path = "/channels"
-	clients_uri_path = "/clients"	
+	clients_uri_path = "/clients"
+	status_uri_path = "/status"
 	channels_sep = "|"
 	default_format = "json"
 	jsonp_required_substr = "_JSONP_"
 	default_jsonp_cb = jsonp_required_substr + "comet_cb"
 	http_cache_age = 86400 * 90
 	default_max_messages_per_channel = 10
+	enable_status = False
 	
 	
 	def __init__(self, args):
@@ -21,7 +23,8 @@ class Config(object):
 		self._max_messages_per_second = 100000
 		self._quote_jsonp = False
 		opts = [ "http-port=", "http-timeout=", "session-timeout=",
-		         "max-messages-per-channel=", "quote-jsonp" ]
+		         "max-messages-per-channel=", "quote-jsonp",
+				 "enable-status" ]
 		try:
 			optlist, args = getopt(args, list(), opts)
 		except GetoptError:
@@ -40,22 +43,25 @@ Usage: simple_comet
 --session-timeout=<session timeout in seconds>
 --messages-per-channel=<default max messages per channel>
 --quote-jsonp
+--enable-status
 """
 		sys.exit(0)
 		
 
-	def parse_opt(self, config, opt):
+	def parse_opt(self, opt):
 		switch, arg = opt
 		if switch == "--http-port":
-			config.http_port = int(arg)
+			self.http_port = int(arg)
 		elif switch == "--http-timeout":
-			config.http_timeout = int(arg)
+			self.http_timeout = int(arg)
 		elif switch == "--session-timeout":
-			config.session_timeout = int(arg)
+			self.session_timeout = int(arg)
 		elif switch == "--max-messages_per_channel":
-			config.max_messages_per_channel = int(arg)
+			self.max_messages_per_channel = int(arg)
 		elif switch == "--quote-jsonp":
-			config.quote_jsonp = True
+			self.quote_jsonp = True
+		elif switch == "--enable-status":
+			self.enable_status = True
 		else:
 			assert(False)			
 			

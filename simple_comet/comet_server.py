@@ -183,6 +183,16 @@ class CometServer(object, resource.Resource):
     def render_GET(self, request):
         connection_id = self.pop_connection_id()        
         connection = Connection(self, request, connection_id)
+        
+        if self.config.enable_status:
+            try:
+                format = connection.get_format(self.config.status_uri_path)
+            except ValueError as e:
+                return connection.error(-1, str(e))
+            
+            if format:
+                return self.show_status(connection)
+        
         try:
             (channels_ids_s, format) = connection.get_channel_id_and_format()
         except ValueError as e:
@@ -257,4 +267,16 @@ class CometServer(object, resource.Resource):
             return connection.error(-2, str(e))
         
         return connection.success({ "client_id": client_id })
+    
+
+    def show_status(self, connection):
+        channels = self.client_channel.channel_id_to_clients_ids
+        clients = self.client_channel.client_id_to_channel_id_to_channels_ids
+        held_connections_count = self.held_connection_channel.held_connections_count
+        
+        status = { "channels": channels.keys(), "clients": clients.keys(),
+                   "held_connections_count": held_connections_count }
+            
+        return connection.success({ "status": status })
+    
     
