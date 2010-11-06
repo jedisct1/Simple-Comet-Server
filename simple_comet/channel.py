@@ -10,15 +10,15 @@ class Channel(object):
     max_messages = property(lambda self: self._max_messages)
     
     
-    def __init__(self, id, max_messages, timeout_cb, use_sessions = False):
+    def __init__(self, id, max_messages, timeout, timeout_cb,
+        use_sessions = False):
         self._id = id
         assert(max_messages > 0)
         self._max_messages = max_messages
         self.timeout_cb = timeout_cb
         self.use_sessions = use_sessions
         self.messages = deque()
-        self._timeout_delayed_call = \
-            reactor.callLater(10, self.timeout)
+        self._timeout_delayed_call = reactor.callLater(timeout, self.timeout)
 
     
     def push_message_content(self, message_id, content):

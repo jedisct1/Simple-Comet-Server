@@ -30,7 +30,7 @@ class CometServer(object, resource.Resource):
     
     def __init__(self, reactor, config):
         self._config = config
-        self.client_channel = ClientChannel()
+        self.client_channel = ClientChannel(config)
         self.held_connection_channel = HeldConnectionChannel()
         self._current_message_id = int(time.time() * config.max_messages_per_second)
         self._current_connection_id = 0

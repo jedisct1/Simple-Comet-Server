@@ -12,7 +12,8 @@ class ExistingClientError(Exception):
 
                             
 class ClientChannel(object):
-    def __init__(self):
+    def __init__(self, config):
+        self._config = config
         self._channel_id_to_channel = dict()
         self._client_id_to_client = dict()
         self._channel_id_to_clients_ids = dict()
@@ -31,6 +32,7 @@ class ClientChannel(object):
             raise ExistingChannelError("Channel already exists")
 
         channel = Channel(id = channel_id, max_messages = max_messages,
+            timeout = self._config.inactive_channel_timeout,
             timeout_cb = self.channel_timeout_cb, use_sessions = use_sessions)
         self._channel_id_to_channel[channel_id] = channel
         self._channel_id_to_clients_ids[channel_id] = set()
