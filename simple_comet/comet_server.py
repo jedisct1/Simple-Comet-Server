@@ -68,7 +68,7 @@ class CometServer(object, resource.Resource):
             if not "channel_id" in request.args:
                 return connection.error(-1, "Missing channel id")
                         
-            channel_id = request.args["channel_id"][0]
+            (channel_id, ) = request.args["channel_id"]
             use_sessions = False
             if "use_sessions" in request.args:
                 use_sessions = bool(request.args["use_sessions"][0])
@@ -96,7 +96,7 @@ class CometServer(object, resource.Resource):
         if not "content" in request.args:
             return connection.error(-1, "Missing content")
         
-        content = request.args["content"][0]
+        (content, ) = request.args["content"]
         message_id = self.pop_message_id()
         channel.push_message_content(message_id, content)
         held_connections = self.held_connection_channel.channel_id_to_held_connections(channel_id)
@@ -126,7 +126,7 @@ class CometServer(object, resource.Resource):
         if not "client_id" in request.args:
             return connection.error(-1, "Missing client_id")
         
-        client_id = request.args["client_id"][0]
+        (client_id, ) = request.args["client_id"]
         
         try:
             client = self.client_channel.client_id_to_client(client_id)
@@ -264,7 +264,7 @@ class CometServer(object, resource.Resource):
         request = connection.request
         if not "client_id" in request.args:
             return connection.error(-1, "Missing client id")
-        client_id = request.args["client_id"][0]
+        (client_id, ) = request.args["client_id"]
         
         try:
             self.client_channel.register_client_id(self, client_id, self.client_timeout_cb)
