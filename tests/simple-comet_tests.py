@@ -43,14 +43,6 @@ def _issue_command(uri_part, data, cb, method = None):
     st.close()    
 
 
-def test_handshake():
-    def _(res):
-        assert(res["return_code"] > 0)
-        assert(res["client_id"] == "anonymous")
-        
-    _issue_command("/handshake.json", None, _)
-    
-
 def test_register_channel():
     def _(res):
         assert(res["return_code"] > 0)

@@ -122,21 +122,22 @@ class CometServer(object, resource.Resource):
                 pass
             
             since = min(since, self._current_message_id)
-            
-        if "client_id" in request.args:            
+           
+        if not "client_id" in request.args:
+            client_id = None
+            client = None
+        else:
             (client_id, ) = request.args["client_id"]
             if not client_id:
                 return connection.error(-1, "Missing client_id")
             
-        else:
-            client_id = self.config.anonymous_client_id
-        
-        try:
-            client = self.client_channel.client_id_to_client(client_id)
-        except KeyError:
-            return connection.error(-3, "Unregistered client_id")
+            try:
+                client = self.client_channel.client_id_to_client(client_id)
+            except KeyError:
+                return connection.error(-3, "Unregistered client_id")                    
 
-        client.ping()
+            client.ping()
+            
         authorized_channels_ids = list()
         for channel_id in channels_ids:
             try:
@@ -144,12 +145,13 @@ class CometServer(object, resource.Resource):
             except KeyError:
                 continue
             
-            if channel.use_sessions != False and \
-                client_id == self.config.anonymous_client_id:
+            if channel.use_sessions != False and client_id == None:
                 continue
             
             authorized_channels_ids.append(channel_id)
-            self.client_channel.register_client_id_for_channel_id(client_id, channel_id)
+            
+            if client_id:
+                self.client_channel.register_client_id_for_channel_id(client_id, channel_id)
         
         channels_messages = dict()
         empty = True
@@ -181,14 +183,6 @@ class CometServer(object, resource.Resource):
     def render_GET(self, request):
         connection_id = self.pop_connection_id()        
         connection = Connection(self, request, connection_id)
-        try:
-            format = connection.get_format(self.config.handshake_uri_path)
-        except ValueError as e:
-            return connection.error(-1, str(e))
-        
-        if format:
-            return self.handshake(connection)
-        
         try:
             (channels_ids_s, format) = connection.get_channel_id_and_format()
         except ValueError as e:
@@ -251,18 +245,6 @@ class CometServer(object, resource.Resource):
         teardown_cb()
     
         
-    def handshake(self, connection):
-        client_id = self.config.anonymous_client_id
-        try:
-            self.client_channel.register_client_id(self, client_id, self.client_timeout_cb)
-        except ExistingClientError as e:
-            pass
-        except Exception as e:
-            return connection.error(-2, str(e))            
-        
-        return connection.success({ "client_id": client_id })
-        
-
     def register_client(self, connection):
         request = connection.request
         if not "client_id" in request.args:
