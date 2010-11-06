@@ -5,12 +5,14 @@ from twisted.internet import reactor
 
 class Client(object):
     id = property(lambda self: self._id)
+    meta = property(lambda self: self._meta)
     comet_server = property(lambda self: self._comet_server)
     
     
-    def __init__(self, comet_server, id, timeout_cb):
+    def __init__(self, comet_server, id, meta = None, timeout_cb):
         self._comet_server = comet_server
         self._id = id
+        self._meta = meta        
         self._timeout_delayed_call = None
         self.timeout_cb = timeout_cb
         self.channels = dict()
