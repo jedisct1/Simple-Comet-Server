@@ -13,7 +13,6 @@ class Config(object):
 	default_jsonp_cb = jsonp_required_substr + "comet_cb"
 	http_cache_age = 86400 * 90
 	default_max_messages_per_channel = 10
-	enable_status = False
 	
 	
 	def __init__(self, args):
@@ -23,6 +22,7 @@ class Config(object):
 		self._inactive_channel_timeout = 90		
 		self._max_messages_per_second = 100000
 		self._quote_jsonp = False
+		self._enable_status = False
 		opts = [ "http-port=", "http-timeout=", "session-timeout=",
 		         "inactive-channel-timeout=",
 		         "max-messages-per-channel=", "quote-jsonp",
