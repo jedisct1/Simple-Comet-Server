@@ -18,7 +18,13 @@ class Channel(object):
         self.timeout_cb = timeout_cb
         self.use_sessions = use_sessions
         self.messages = deque()
-        self._timeout_delayed_call = reactor.callLater(timeout, self.timeout)
+        
+        if self.use_sessions:
+            self._timeout_delayed_call = \
+                reactor.callLater(timeout, self.timeout)
+                
+        else:
+            self._timeout_delayed_call = None
 
     
     def push_message_content(self, message_id, content):
@@ -35,6 +41,10 @@ class Channel(object):
                                 self.messages)
         return found_messages
 
+    
+    def ping(self):
+        self.cancel_timeout_delayed_call()
+    
     
     def cancel_timeout_delayed_call(self):
         if self._timeout_delayed_call != None and \
