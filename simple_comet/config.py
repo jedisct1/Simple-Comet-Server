@@ -20,9 +20,11 @@ class Config(object):
 		self._http_port = 8080
 		self._http_timeout = 30
 		self._client_session_timeout = 60
+		self._inactive_channel_timeout = 90		
 		self._max_messages_per_second = 100000
 		self._quote_jsonp = False
 		opts = [ "http-port=", "http-timeout=", "session-timeout=",
+		         "inactive-channel-timeout=",
 		         "max-messages-per-channel=", "quote-jsonp",
 				 "enable-status" ]
 		try:
@@ -41,6 +43,7 @@ Usage: simple_comet
 --http-port=<HTTP server port>
 --http-timeout=<HTTP timeout in seconds>
 --session-timeout=<session timeout in seconds>
+--inactive-channel-timeout=<inactive channel timeout in seconds>
 --messages-per-channel=<default max messages per channel>
 --quote-jsonp
 --enable-status
@@ -56,6 +59,8 @@ Usage: simple_comet
 			self.http_timeout = int(arg)
 		elif switch == "--session-timeout":
 			self.session_timeout = int(arg)
+		elif switch == "--inactive-channel-timeout":
+			self.inactive_channel_timeout = int(arg)
 		elif switch == "--max-messages_per_channel":
 			self.max_messages_per_channel = int(arg)
 		elif switch == "--quote-jsonp":
@@ -100,6 +105,17 @@ Usage: simple_comet
 
 
 	@property
+	def inactive_channel_timeout(self):
+		return self._inactive_channel_timeout
+
+	
+	@inactive_channel_timeout.setter
+	def inactive_channel_timeout(self, value):
+		assert(value > 0)
+		self._inactive_channel_timeout = value
+
+
+	@property
 	def max_messages_per_second(self):
 		return self._max_messages_per_second
 
@@ -118,4 +134,14 @@ Usage: simple_comet
 	@quote_jsonp.setter
 	def quote_jsonp(self, value):
 		self._quote_jsonp = value
+
+		
+	@property
+	def enable_status(self):
+		return self._enable_status
+
+	
+	@enable_status.setter
+	def enable_status(self, value):
+		self._enable_status = value
 

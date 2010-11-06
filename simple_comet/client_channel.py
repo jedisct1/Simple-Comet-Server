@@ -30,7 +30,8 @@ class ClientChannel(object):
         if channel_id in self._channel_id_to_channel:
             raise ExistingChannelError("Channel already exists")
 
-        channel = Channel(channel_id, max_messages, use_sessions)
+        channel = Channel(id = channel_id, max_messages = max_messages,
+            timeout_cb = self.channel_timeout_cb, use_sessions = use_sessions)
         self._channel_id_to_channel[channel_id] = channel
         self._channel_id_to_clients_ids[channel_id] = set()
         
@@ -71,11 +72,24 @@ class ClientChannel(object):
 
 
     def remove_channel_id(self, channel_id):
-        for client_id in self._channel_id_to_clients_ids[channel_id]:
-            self._client_id_to_channels_ids[client_id].remove(channel_id)
+        if channel_id in self._channel_id_to_clients_ids:
+            for client_id in self._channel_id_to_clients_ids[channel_id]:
+                self._client_id_to_channels_ids[client_id].remove(channel_id)
         
-        self._channel_id_to_channel.pop(channel_id)
-        self._channel_id_to_clients_ids.pop(channel_id)
+        if channel_id in self._channel_id_to_clients_ids:
+            self._channel_id_to_clients_ids.pop(channel_id)
+            
+        if channel_id in self._channel_id_to_channel:
+            channel = self._channel_id_to_channel[channel_id]
+            self._channel_id_to_channel.pop(channel_id)
+            channel.teardown()
 
     
+    def channel_timeout_cb(self, channel_id, teardown_cb):
+        if channel_id in self._channel_id_to_clients_ids and \
+           self._channel_id_to_clients_ids[channel_id]:
+            return
+        
+        self.remove_channel_id(channel_id)
+        teardown_cb()
     
