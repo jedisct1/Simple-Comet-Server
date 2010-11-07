@@ -81,19 +81,19 @@ Your server-side application should probably handle this, not the
 client.
 
     Method: `POST`
-    URI: `http://$HOST:$PORT/channels.json`
+    URI: `http://$HOST:$PORT/channels.json`    
     Payload:
-    * `channel_id=(name of the new channel)`
-    * `use_sessions=1`: only registered clients can join the channel
-    * `max_messages=(non-default number of retained messages)`
+    `channel_id=(name of the new channel)`
+    `use_sessions=1`: only registered clients can join the channel
+    `max_messages=(non-default number of retained messages)`
     
   
 * **Pushing data to a channel**
 
     Method: `POST`
-    URI: `http://$HOST:$PORT/channels/(channel name).json`OA
+    URI: `http://$HOST:$PORT/channels/(channel name).json`
     Payload:
-    * `content=(message content)`
+    `content=(message content)`
 
 
 * **Registering a client**
@@ -101,7 +101,7 @@ client.
     Method: `POST`
     URI: `http://$HOST:$PORT/clients.json`
     Payload:
-    * `content=(message content)`
+    `content=(message content)`
 
 
 * **Monitoring the server**
