@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang=en>
+<head>
+  <meta charset=utf-8 />
+  <title>Simple Comet Test</title>
+</head>
+<body>
+  <script src="simple-comet.js"></script>
+  <script>
+var channels = ['chan', 'test'],
+    url = 'http://localhost:8080/channels/' +
+    channels.join('|') + '.jsonp';
+SimpleComet.subscribe(url, function(res) {
+    var node_p = document.createElement('p');
+    node_p.appendChild(document.createTextNode(JSON.stringify(res)));
+    document.body.appendChild(node_p);
+});
+  </script>
+</body>
+</html>
