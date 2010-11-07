@@ -9,7 +9,7 @@
   <script>
 var channels = ['chan', 'test'],
     url = 'http://localhost:8080/channels/' +
-    channels.join('|') + '.jsonp';
+    channels.join(encodeURIComponent('|')) + '.jsonp';
 SimpleComet.subscribe(url, function(res) {
     var node_p = document.createElement('p');
     node_p.appendChild(document.createTextNode(JSON.stringify(res)));

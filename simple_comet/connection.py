@@ -3,6 +3,7 @@ from config import *
 from wsgiref.handlers import format_date_time
 from datetime import datetime, timedelta
 from time import mktime
+import urllib
 import re
 
 
@@ -27,7 +28,7 @@ class Connection(object):
         
     
     def get_channel_id_and_format(self):
-        path = self._request.path
+        path = urllib.unquote(self._request.path)
         channels_uri_path = self.comet_server.config.channels_uri_path
         if not path.startswith(channels_uri_path):
             raise ValueError("Missing %r prefix" % channels_uri_path)
