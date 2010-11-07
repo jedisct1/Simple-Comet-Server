@@ -34,7 +34,7 @@ class Client(object):
             self._timeout_delayed_call.active():
             self._timeout_delayed_call.cancel()
             
-        self.timeout_delayed_call = None
+        self._timeout_delayed_call = None
 
         
     def timeout(self):
