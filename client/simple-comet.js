@@ -53,9 +53,9 @@ window['SimpleComet'] = function() {
     }
 
     function comet_frame_ready_cb(simple_comet_proxy) {
-        this.subscribe = simple_comet_proxy.subscribe;
+        this.subscribe = simple_comet_proxy['subscribe'];
         for (var args; args = queue.shift();) {
-            simple_comet_proxy.subscribe.apply(this, args);
+            this.subscribe.apply(this, args);
         }
     }
 
