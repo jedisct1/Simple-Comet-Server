@@ -30,7 +30,7 @@ highly recommended.
 Server switches
 ---------------
 
-    simple_comet
+`simple_comet`
     
     --http-port=<HTTP server port> (default=8080)
 
