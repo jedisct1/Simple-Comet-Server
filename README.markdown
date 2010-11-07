@@ -56,7 +56,7 @@ space for new messages.
     
     --quote-json
 
-Encapsulate JSON responses with /*-secure- ... */ comments.
+Encapsulate JSON responses with `/*-secure- ... */` comments.
 
     --enable-status
 
