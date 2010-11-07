@@ -80,22 +80,22 @@ query string, but the name must start with `_JSONP_`.
 Your server-side application should probably handle this, not the
 client.
 
-    Method: `POST`
-    URI: `http://$HOST:$PORT/channels.json`    
+    Method: POST
+    URI: http://$HOST:$PORT/channels.json
     Payload:
-    `channel_id=(name of the new channel)`
-    `use_sessions=1`: only registered clients can join the channel
-    `max_messages=(non-default number of retained messages)`
+    channel_id=(name of the new channel)
+    use_sessions=1: only registered clients can join the channel
+    max_messages=(non-default number of retained messages)
     
   
 * **Pushing data to a channel**
 
 Store a new message and forward it to subscribers.
 
-    Method: `POST`
-    URI: `http://$HOST:$PORT/channels/(channel name).json`
+    Method: POST
+    URI: http://$HOST:$PORT/channels/(channel name).json
     Payload:
-    `content=(message content)`
+    content=(message content)
 
 
 * **Registering a client**
@@ -106,18 +106,18 @@ Registered clients can join non-anonymous channels.
 Registering a client is not required in order to subscribe to
 anonymous channels.
 
-    Method: `POST`
-    URI: `http://$HOST:$PORT/clients.json`
+    Method: POST
+    URI: http://$HOST:$PORT/clients.json
     Payload:
-    `client_id=(unique client identifier)`
+    client_id=(unique client identifier)
 
 
 * **Monitoring the server**
 
 Only available if --enable-status has been enabled.
 
-    Method: `GET`
-    URI: `http://$HOST:$PORT/status.json`
+    Method: GET
+    URI: http://$HOST:$PORT/status.json
 
 
 * **Reading data from channels**
@@ -127,13 +127,12 @@ This should be sent by your server-side application.
     Method: `GET`
     URI: `http://$HOST:$PORT/channels/(channels list).json`
     Query string:
-`client_id=(client identifier)`: only required for non-anonymous
-channels
+    client_id=(client identifier): only required for non-anonymous channels
 
 `since=(identifier of the last read frame)`
    
 Multiple channels can be subscribed to, and anonymous and non-anonymous
-channels can be mixed. Just use a pipe (%7C) as a delimiter.
+channels can be mixed. Just use a pipe (`%7C`) as a delimiter.
 
 The reply looks like:
 
