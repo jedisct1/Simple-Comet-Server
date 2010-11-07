@@ -12,7 +12,7 @@ class Config(object):
 	jsonp_required_substr = "_JSONP_"
 	default_jsonp_cb = jsonp_required_substr + "comet_cb"
 	http_cache_age = 1
-	default_max_messages_per_channel = 10
+	default_max_messages_per_channel = 100
 	
 	
 	def __init__(self, args):
@@ -21,7 +21,7 @@ class Config(object):
 		self._client_session_timeout = 60
 		self._inactive_channel_timeout = 90		
 		self._max_messages_per_second = 100000
-		self._quote_jsonp = False
+		self._quote_json = False
 		self._enable_status = False
 		opts = [ "http-port=", "http-timeout=", "session-timeout=",
 		         "inactive-channel-timeout=",
@@ -40,12 +40,12 @@ class Config(object):
 		print """
 Usage: simple_comet
             
---http-port=<HTTP server port>
---http-timeout=<HTTP timeout in seconds>
---session-timeout=<session timeout in seconds>
---inactive-channel-timeout=<inactive channel timeout in seconds>
---messages-per-channel=<default max messages per channel>
---quote-jsonp
+--http-port=<HTTP server port> (default=8080)
+--http-timeout=<HTTP timeout in seconds> (default=30)
+--session-timeout=<session timeout in seconds> (default=60)
+--inactive-channel-timeout=<inactive channel timeout> (default=90)
+--messages-per-channel=<default max messages per channel> (default=100)
+--quote-json
 --enable-status
 """
 		sys.exit(0)
@@ -63,8 +63,8 @@ Usage: simple_comet
 			self.inactive_channel_timeout = int(arg)
 		elif switch == "--max-messages_per_channel":
 			self.max_messages_per_channel = int(arg)
-		elif switch == "--quote-jsonp":
-			self.quote_jsonp = True
+		elif switch == "--quote-json":
+			self.quote_json = True
 		elif switch == "--enable-status":
 			self.enable_status = True
 		else:
@@ -127,13 +127,13 @@ Usage: simple_comet
 
 
 	@property
-	def quote_jsonp(self):
-		return self._quote_jsonp
+	def quote_json(self):
+		return self._quote_json
 
 	
-	@quote_jsonp.setter
-	def quote_jsonp(self, value):
-		self._quote_jsonp = value
+	@quote_json.setter
+	def quote_json(self, value):
+		self._quote_json = value
 
 		
 	@property
