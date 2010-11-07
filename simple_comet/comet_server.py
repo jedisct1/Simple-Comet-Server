@@ -38,16 +38,6 @@ class CometServer(object, resource.Resource):
         self.comet_server = self
 
         
-    def pop_message_id(self):
-        self._current_message_id = self._current_message_id + 1
-        return self.current_message_id
-        
-    
-    def pop_connection_id(self):
-        self._current_connection_id = self._current_connection_id + 1
-        return self._current_connection_id
-        
-                
     def render_POST(self, request):
         connection_id = self.pop_connection_id()
         connection = Connection(self, request, connection_id)        
@@ -113,6 +103,58 @@ class CometServer(object, resource.Resource):
         return connection.success({ "message_id": message_id })
     
     
+    def render_GET(self, request):
+        connection_id = self.pop_connection_id()        
+        connection = Connection(self, request, connection_id)
+        
+        if self.config.enable_status:
+            try:
+                format = connection.get_format(self.config.status_uri_path)
+            except ValueError as e:
+                return connection.error(-1, str(e))
+            
+            if format:
+                return self.show_status(connection)
+        
+        try:
+            (channels_ids_s, format) = connection.get_channel_id_and_format()
+        except ValueError as e:
+            return connection.error(-1, str(e))     
+
+        if not channels_ids_s:
+            return connection.error(-2, "No channels")
+        channels_ids = channels_ids_s.split(self.config.channels_sep)
+        if not channels_ids:
+            return connection.error(-2, "Empty channels list")
+        
+        return self.handle_channels_read(connection, channels_ids)
+    
+    
+    def render_DELETE(self, request):
+        connection_id = self.pop_connection_id()
+        connection = Connection(self, request, connection_id)
+        try:
+            (channel_id, format) = connection.get_channel_id_and_format()
+        except ValueError as e:
+            return connection.error(-1, str(e))     
+        
+        removed = self.remove_channel_id(channel_id)
+        
+        return connection.success({ "channel_id": channel_id,
+                                    "removed": removed },
+                                    return_code = int(removed) + 1)
+
+    
+    def pop_message_id(self):
+        self._current_message_id = self._current_message_id + 1
+        return self.current_message_id
+        
+    
+    def pop_connection_id(self):
+        self._current_connection_id = self._current_connection_id + 1
+        return self._current_connection_id
+        
+                
     def handle_channels_read(self, connection, channels_ids):
         request = connection.request
         since = 0
@@ -183,48 +225,6 @@ class CometServer(object, resource.Resource):
         return NOT_DONE_YET
         
 
-    def render_GET(self, request):
-        connection_id = self.pop_connection_id()        
-        connection = Connection(self, request, connection_id)
-        
-        if self.config.enable_status:
-            try:
-                format = connection.get_format(self.config.status_uri_path)
-            except ValueError as e:
-                return connection.error(-1, str(e))
-            
-            if format:
-                return self.show_status(connection)
-        
-        try:
-            (channels_ids_s, format) = connection.get_channel_id_and_format()
-        except ValueError as e:
-            return connection.error(-1, str(e))     
-
-        if not channels_ids_s:
-            return connection.error(-2, "No channels")
-        channels_ids = channels_ids_s.split(self.config.channels_sep)
-        if not channels_ids:
-            return connection.error(-2, "Empty channels list")
-        
-        return self.handle_channels_read(connection, channels_ids)
-    
-    
-    def render_DELETE(self, request):
-        connection_id = self.pop_connection_id()
-        connection = Connection(self, request, connection_id)
-        try:
-            (channel_id, format) = connection.get_channel_id_and_format()
-        except ValueError as e:
-            return connection.error(-1, str(e))     
-        
-        removed = self.remove_channel_id(channel_id)
-        
-        return connection.success({ "channel_id": channel_id,
-                                    "removed": removed },
-                                    return_code = int(removed) + 1)
-
-    
     def connection_finished(self, failure, connection_id):
         self.held_connection_channel.remove_held_connection_id(connection_id)
     
