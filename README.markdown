@@ -145,12 +145,12 @@ The reply looks like:
         ],
         "channelB": [
           { "content": "message1",
-            "id": 128916015846786,
-            "ts": 1289160235
-          },
-          { "content": "message2",
             "id": 128916015846787,
             "ts": 1289160237
+          },
+          { "content": "message2",
+            "id": 128916015846786,
+            "ts": 1289160235
           }
         ]        
       },
