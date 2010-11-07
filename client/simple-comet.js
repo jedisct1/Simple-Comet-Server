@@ -21,15 +21,19 @@ window['SimpleCometProxy'] = function() {
             subscribe(url, cb, client_id);
         }, timeout);
         window[jsonp_cb] = function(resp) {
+            if (resp['return_code'] <= 0) {
+                return;
+            }
             clearTimeout(cancel_timer);
             jsonp_node.parentNode.removeChild(jsonp_node);
-            if (resp.since >= since) {
-                cb(resp);
-                since = resp.last_id;
-                setTimeout(function() {
-                    subscribe(url, cb, client_id);
-                }, min_delay);
+            if (resp.since < since) {
+                return;
             }
+            cb(resp);
+            since = resp.last_id;
+            setTimeout(function() {
+                subscribe(url, cb, client_id);
+            }, min_delay);
         }
     }
 
