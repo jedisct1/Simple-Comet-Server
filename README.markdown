@@ -90,6 +90,8 @@ client.
   
 * **Pushing data to a channel**
 
+Store a new message and forward it to subscribers.
+
     Method: `POST`
     URI: `http://$HOST:$PORT/channels/(channel name).json`
     Payload:
@@ -98,10 +100,16 @@ client.
 
 * **Registering a client**
 
+Your server-side application should probably handle this, not the
+client.
+Registered clients can join non-anonymous channels.
+Registering a client is not required in order to subscribe to
+anonymous channels.
+
     Method: `POST`
     URI: `http://$HOST:$PORT/clients.json`
     Payload:
-    `content=(message content)`
+    `client_id=(unique client identifier)`
 
 
 * **Monitoring the server**
