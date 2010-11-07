@@ -68,8 +68,9 @@ class ClientChannel(object):
             if len(self._channel_id_to_clients_ids[channel_id]) == 0:
                 empty_channels.add(channel_id)
         
-        self._client_id_to_client.pop(client_id)
-        self._client_id_to_channels_ids.pop(client_id)
+        del self._client_id_to_client[client_id]
+        del self._client_id_to_channels_ids[client_id]
+        
         return empty_channels
 
 
@@ -79,11 +80,11 @@ class ClientChannel(object):
                 self._client_id_to_channels_ids[client_id].remove(channel_id)
         
         if channel_id in self._channel_id_to_clients_ids:
-            self._channel_id_to_clients_ids.pop(channel_id)
+            del self._channel_id_to_clients_ids[channel_id]
             
         if channel_id in self._channel_id_to_channel:
             channel = self._channel_id_to_channel[channel_id]
-            self._channel_id_to_channel.pop(channel_id)
+            del self._channel_id_to_channel[channel_id]
             channel.teardown()
 
     

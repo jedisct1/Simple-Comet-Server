@@ -1,21 +1,9 @@
 
-import cgi
 import time
-import re
-try:
-    import json
-except ImportError:
-    import simplejson as json
-
-from twisted.web import server, resource, http
+from twisted.web import resource
 from twisted.web.server import NOT_DONE_YET
-from twisted.internet import reactor
-from collections import deque
-from pprint import pprint
 from config import *
 from connection import Connection
-from channel import Channel
-from client import Client
 from client_channel import ClientChannel, \
     ExistingChannelError, ExistingClientError
 from held_connection_channel import HeldConnectionChannel
@@ -28,13 +16,13 @@ class CometServer(object, resource.Resource):
     config = property(lambda self: self._config)
         
     
-    def __init__(self, reactor, config):
+    def __init__(self, config):
+        resource.Resource.__init__(self)
         self._config = config
         self.client_channel = ClientChannel(config)
         self.held_connection_channel = HeldConnectionChannel()
         self._current_message_id = int(time.time() * config.max_messages_per_second)
         self._current_connection_id = 0
-        self._reactor = reactor
         self.comet_server = self
 
         
@@ -240,7 +228,7 @@ class CometServer(object, resource.Resource):
     
     def remove_channel_id(self, channel_id):
         try:
-            channel = self.client_channel.channel_id_to_channel(channel_id)
+            self.client_channel.channel_id_to_channel(channel_id)
         except KeyError:
             return False
         
