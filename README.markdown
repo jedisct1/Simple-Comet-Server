@@ -19,9 +19,9 @@ The server requires Python and the Twisted framework.
 
 It can be installed the boring way:
 
-    sudo python setup.py install
     git clone git://github.com/jedisct1/Simple-Comet-Server.git
     cd Simple-Comet-Server
+    sudo python setup.py install    
     
 Using simple_comet as a backend for a frontend server like Nginx is
 highly recommended.
