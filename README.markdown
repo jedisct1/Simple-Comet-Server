@@ -128,8 +128,7 @@ This should be sent by your server-side application.
     URI: `http://$HOST:$PORT/channels/(channels list).json`
     Query string:
     client_id=(client identifier): only required for non-anonymous channels
-
-`since=(identifier of the last read frame)`
+    since=(identifier of the last read frame)
    
 Multiple channels can be subscribed to, and anonymous and non-anonymous
 channels can be mixed. Just use a pipe (`%7C`) as a delimiter.
