@@ -1,6 +1,6 @@
 window['SimpleCometProxy'] = function() {
     var jsonp_cb = '_JSONP_comet_cb',
-        min_delay = 100, timeout = 5000, since = 0;
+        min_delay = 100, timeout = 30000, since = 0, seq = 0;
 
     function create_jsonp_node(url) {
         var node = document.createElement('script');
@@ -12,10 +12,12 @@ window['SimpleCometProxy'] = function() {
     }
 
     function subscribe(url, cb, client_id) {
-        var _url = url + '?since=' + encodeURIComponent(since);
+        var _url = url + '?since=' + encodeURIComponent(since) +
+            '&t=' + new Date().getTime() + '.' + seq;
         client_id && (_url += '&client_id=' + encodeURIComponent(client_id));
         var jsonp_node = create_jsonp_node(_url);
         var cancel_timer = setTimeout(function() {
+            seq++;
             jsonp_node.parentNode.removeChild(jsonp_node);
             subscribe(url, cb, client_id);
         }, timeout);
