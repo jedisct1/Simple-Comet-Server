@@ -135,7 +135,7 @@ class CometServer(object, resource.Resource):
             try:
                 client = self.client_channel.client_id_to_client(client_id)
             except KeyError:
-                return connection.error(-3, "Unregistered client_id")                    
+                return connection.error(-3, "Unregistered client_id")
 
             client.ping()
             
