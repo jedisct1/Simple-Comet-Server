@@ -161,7 +161,7 @@ The reply looks like:
 
 `last_id` is the identifier of the last frame. The following request
 should include it as the value for `since`.
-The first request may omit this.
+The first request may omit this or use 0.
 
 
 Javascript API
