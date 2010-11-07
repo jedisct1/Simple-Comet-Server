@@ -124,8 +124,8 @@ Only available if --enable-status has been enabled.
 
 This should be sent by your server-side application.
 
-    Method: `GET`
-    URI: `http://$HOST:$PORT/channels/(channels list).json`
+    Method: GET
+    URI: http://$HOST:$PORT/channels/(channels list).json
     Query string:
     client_id=(client identifier): only required for non-anonymous channels
     since=(identifier of the last read frame)
