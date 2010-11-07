@@ -11,7 +11,7 @@ class Config(object):
 	default_format = "json"
 	jsonp_required_substr = "_JSONP_"
 	default_jsonp_cb = jsonp_required_substr + "comet_cb"
-	http_cache_age = 86400 * 90
+	http_cache_age = 1
 	default_max_messages_per_channel = 10
 	
 	

@@ -74,7 +74,6 @@ class Connection(object):
           "s-max-age=" + cache_age_s + ", " \
           "stale-while-revalidate=" + cache_age_s + ", " \
           "stale-if-error=86400")
-        self._request.setHeader("Pragma", "cache")
         expire_tt = (datetime.now() + timedelta(seconds = http_cache_age)).timetuple()
         expire_ts = mktime(expire_tt)
         self._request.setHeader("Expires", format_date_time(expire_ts))
