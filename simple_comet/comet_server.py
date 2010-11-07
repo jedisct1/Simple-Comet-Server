@@ -2,7 +2,7 @@
 import time
 from twisted.web import resource
 from twisted.web.server import NOT_DONE_YET
-from config import *
+from config import Config
 from connection import Connection
 from client_channel import ClientChannel, \
     ExistingChannelError, ExistingClientError

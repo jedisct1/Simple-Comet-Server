@@ -1,5 +1,5 @@
 
-from config import *
+from config import Config
 from twisted.internet import reactor
 
 

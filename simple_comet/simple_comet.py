@@ -1,5 +1,5 @@
 
-from config import *
+from config import Config
 from twisted.internet import reactor
 from twisted.web import server
 from comet_server import CometServer

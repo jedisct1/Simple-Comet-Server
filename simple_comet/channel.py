@@ -1,5 +1,5 @@
 
-from config import *
+from config import Config
 import time
 from collections import deque
 from twisted.internet import reactor
