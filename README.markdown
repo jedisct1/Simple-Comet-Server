@@ -1,15 +1,15 @@
 A simple COMET server
 =====================
 
-This a simple HTTP long-polling server.
+This is a simple HTTP long-polling server.
 
 With intentionally no support for Websockets nor Bayeux.
 
 But the client-side Javascript library weights only 1 Kb, including
 support for multiple channels and cross-domain requests.
 
-Hence, it should work just fine on most web browsers, including
-decent mobile browsers.
+It should work just fine on most web browsers, including legacy ones and
+mobile browsers.
 
 
 Installation
