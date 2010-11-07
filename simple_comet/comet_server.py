@@ -104,6 +104,7 @@ class CometServer(object, resource.Resource):
         channels_messages = { channel_id: new_messages }
         for held_connection in held_connections:
             result = held_connection.success({ "messages": channels_messages,
+                                               "since": held_connection.meta["since"],
                                                "last_id": self.current_message_id })
             held_connection.send_cache_headers()
             held_connection.delayed_reply(result)
@@ -170,8 +171,10 @@ class CometServer(object, resource.Resource):
         if not empty:
             connection.send_cache_headers()            
             return connection.success({ "messages": channels_messages,
+                                        "since": since,
                                         "last_id": self.current_message_id })
-                                        
+            
+        connection.meta = { "since": since }
         self.held_connection_channel. \
             register_held_connection_for_channels_ids(connection, authorized_channels_ids)
 

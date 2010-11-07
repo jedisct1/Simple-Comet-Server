@@ -89,7 +89,7 @@ class ClientChannel(object):
     
     def channel_timeout_cb(self, channel_id, teardown_cb):
         if channel_id in self._channel_id_to_clients_ids and \
-           self._channel_id_to_clients_ids[channel_id]:
+            self._channel_id_to_clients_ids[channel_id]:
             return
         
         self.remove_channel_id(channel_id)

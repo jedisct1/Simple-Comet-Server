@@ -71,6 +71,7 @@ def test_push_content():
 def test_read_content():
     def _(res):
         assert(res["return_code"] > 0)
+        assert(res["since"] == 0)
         
     _issue_command("/channels/chan.json", None, _)
     

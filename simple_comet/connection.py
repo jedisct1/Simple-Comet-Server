@@ -23,6 +23,7 @@ class Connection(object):
         self._request = request
         self.format = None
         self._id = id
+        self._meta = None
         
     
     def get_channel_id_and_format(self):
