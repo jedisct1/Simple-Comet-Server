@@ -95,17 +95,15 @@ class Connection(object):
             if not re.search("^[a-z_]+[a-z0-9_.]*$", jsonp_cb, re.IGNORECASE):
                 return "/* invalid JSONP callback name */"
 
-            jsonp_ret = jsonp_cb + "(" + json_obj + ");"                
+            return jsonp_cb + "(" + json_obj + ");"                
         else:
             assert(config.default_format == "json")
             self._request.setHeader("Content-Type", "application/json")
             
             if config.quote_json:
-                json_ret = "/*-secure- " + json_obj + " */"
+                return "/*-secure- " + json_obj + " */"
             else:
-                json_ret = json_obj
-        
-        return json_obj
+                return json_obj
 
 
     def error(self, return_code, message):
