@@ -4,7 +4,6 @@ window['SimpleCometProxy'] = function() {
 
     function create_jsonp_node(url) {
         var node = document.createElement('script');
-        node.setAttribute('type', 'application/javascript');
         node.setAttribute('src', url);
         document.body.appendChild(node);
 
