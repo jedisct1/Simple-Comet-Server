@@ -15,7 +15,7 @@ mobile browsers.
 Installation
 ------------
 
-The server requires Python and the Twisted framework.
+The server requires Python >= 2.5 and the Twisted framework.
 
 It can be installed the boring way:
 

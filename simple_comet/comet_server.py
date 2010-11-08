@@ -31,7 +31,7 @@ class CometServer(object, resource.Resource):
         connection = Connection(self, request, connection_id)        
         try:
             format = connection.get_format(self.config.clients_uri_path)
-        except ValueError as e:
+        except ValueError, e:
             return connection.error(-1, str(e))
         
         if format:
@@ -39,7 +39,7 @@ class CometServer(object, resource.Resource):
         
         try:
             (channel_id, format) = connection.get_channel_id_and_format()
-        except ValueError as e:
+        except ValueError, e:
             return connection.error(-1, str(e))
         
         if not channel_id:
@@ -98,7 +98,7 @@ class CometServer(object, resource.Resource):
         if self.config.enable_status:
             try:
                 format = connection.get_format(self.config.status_uri_path)
-            except ValueError as e:
+            except ValueError, e:
                 return connection.error(-1, str(e))
             
             if format:
@@ -106,7 +106,7 @@ class CometServer(object, resource.Resource):
         
         try:
             (channels_ids_s, format) = connection.get_channel_id_and_format()
-        except ValueError as e:
+        except ValueError, e:
             return connection.error(-1, str(e))     
 
         if not channels_ids_s:
@@ -123,7 +123,7 @@ class CometServer(object, resource.Resource):
         connection = Connection(self, request, connection_id)
         try:
             (channel_id, format) = connection.get_channel_id_and_format()
-        except ValueError as e:
+        except ValueError, e:
             return connection.error(-1, str(e))     
         
         removed = self.remove_channel_id(channel_id)
@@ -220,7 +220,7 @@ class CometServer(object, resource.Resource):
     def register_channel_id(self, connection, channel_id, max_messages, use_sessions):
         try:
             self.client_channel.register_channel_id(channel_id, max_messages, use_sessions)
-        except ExistingChannelError as e:
+        except ExistingChannelError, e:
             return connection.error(-2, str(e))
         
         return connection.success({ "channel_id": channel_id })
@@ -254,7 +254,7 @@ class CometServer(object, resource.Resource):
         
         try:
             self.client_channel.register_client_id(self, client_id, self.client_timeout_cb)
-        except ExistingClientError as e:
+        except ExistingClientError, e:
             return connection.error(-2, str(e))
         
         return connection.success({ "client_id": client_id })

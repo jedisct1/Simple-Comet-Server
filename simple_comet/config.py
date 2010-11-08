@@ -70,78 +70,65 @@ Usage: simple_comet
         else:
             assert(False)           
             
-                            
-    @property
-    def http_port(self):
-        return self._http_port
-
     
-    @http_port.setter
-    def http_port(self, value):
+    def set_http_port(self, value):
         assert(value in range(0, 65536))
         self._http_port = value
 
 
-    @property
-    def http_timeout(self):     
-        return self._http_timeout
+    http_port = property(lambda self: self._http_port, set_http_port)        
 
-    
-    @http_timeout.setter
-    def http_timeout(self, value):
+        
+    def set_http_timeout(self, value):
         assert(value > 0)
         self._http_timeout = value
-        
-        
-    @property
-    def client_session_timeout(self):
-        return self._client_session_timeout
 
-    
-    @client_session_timeout.setter
-    def client_session_timeout(self, value):
+        
+    http_timeout = property(lambda self: self._http_timeout,
+        set_http_timeout)        
+        
+        
+    def set_client_session_timeout(self, value):
         assert(value > 0)
         self._client_session_timeout = value
 
+        
+    client_session_timeout = \
+        property(lambda self: self._client_session_timeout,
+            set_client_session_timeout)
+            
 
-    @property
-    def inactive_channel_timeout(self):
-        return self._inactive_channel_timeout
-
-    
-    @inactive_channel_timeout.setter
-    def inactive_channel_timeout(self, value):
+    def set_inactive_channel_timeout(self, value):
         assert(value > 0)
         self._inactive_channel_timeout = value
 
+    inactive_channel_timeout = \
+        property(lambda self: self._inactive_channel_timeout,
+            set_inactive_channel_timeout)
+            
 
-    @property
-    def max_messages_per_second(self):
-        return self._max_messages_per_second
-
-    
-    @max_messages_per_second.setter
-    def max_messages_per_second(self, value):
+    def set_max_messages_per_second(self, value):
         assert(value > 0)
         self._max_messages_per_second = value
 
-
-    @property
-    def quote_json(self):
-        return self._quote_json
-
+        
+    max_messages_per_second = \
+        property(lambda self: self._max_messages_per_second,
+            set_max_messages_per_second)
+            
     
-    @quote_json.setter
-    def quote_json(self, value):
+    def set_quote_json(self, value):
         self._quote_json = value
 
         
-    @property
-    def enable_status(self):
-        return self._enable_status
+    quote_json = property(lambda self: self._quote_json,
+        set_quote_json)        
 
-    
-    @enable_status.setter
-    def enable_status(self, value):
+
+    def set_enable_status(self, value):
         self._enable_status = value
+
+        
+    enable_status = property(lambda self: self._enable_status,
+        set_enable_status)
 
