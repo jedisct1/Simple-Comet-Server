@@ -7,8 +7,6 @@ try:
 except ImportError:
     import simplejson as json
 
-from simple_comet import main
-    
 
 BASE_URI = "http://127.0.0.1:8080"
 
@@ -121,12 +119,3 @@ def test_delete_nonexistent_chan():
         assert(res["removed"] == False)        
 
     _issue_command("/channels/nonexistent.json", None, _, "DELETE")
-
-
-    
-
-        
-        
-
-
-    

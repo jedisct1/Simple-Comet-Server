@@ -270,4 +270,3 @@ class CometServer(object, resource.Resource):
             
         return connection.success({ "status": status })
     
-    

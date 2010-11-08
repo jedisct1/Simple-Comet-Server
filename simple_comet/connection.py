@@ -122,5 +122,3 @@ class Connection(object):
     def delayed_reply(self, result):
         self._request.write(result)
         self._request.finish()
-
-
