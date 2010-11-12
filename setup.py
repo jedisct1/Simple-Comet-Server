@@ -16,7 +16,7 @@ CONFIG = {
     "download_url": "https://github.com/jedisct1/Simple-Comet-Server",
     "install_requires": [ "nose", "twisted" ],
     "packages": [ "simple_comet" ],
-    "scripts": [ "bin/simple-comet" ],
+    "scripts": [ "bin/simple_comet" ],
     "name": "simple_comet"
 }
 
