@@ -8,7 +8,7 @@ except ImportError:
     import simplejson as json
 
 
-BASE_URI = "http://127.0.0.1:8080"
+BASE_URI = "http://127.0.0.1:4080"
 
 
 def setup():

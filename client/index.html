@@ -8,7 +8,7 @@
   <script src="simple-comet.js"></script>
   <script>
 var channels = ['chan', 'test'],
-    url = 'http://localhost:8080/channels/' +
+    url = 'http://localhost:4080/channels/' +
     channels.join(encodeURIComponent('|')) + '.jsonp';
 SimpleComet.subscribe(url, function(res) {
     var node_p = document.createElement('p');

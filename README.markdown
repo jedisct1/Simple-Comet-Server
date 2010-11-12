@@ -32,7 +32,7 @@ Server switches
 
 `simple_comet`
     
-    --http-port=<HTTP server port> (default=8080)
+    --http-port=<HTTP server port> (default=4080)
 
 Change the HTTP port the server will listen to.
 
