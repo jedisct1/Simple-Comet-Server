@@ -24,8 +24,8 @@ class Config(object):
         self._max_messages_per_second = 100000
         self._quote_json = False
         self._enable_status = False
-        opts = [ "http-port=", "http-timeout=", "session-timeout=",
-                 "inactive-channel-timeout=",
+        opts = [ "http-port=", "http-timeout=", "unix-socket-path=",
+                 "session-timeout=", "inactive-channel-timeout=",
                  "max-messages-per-channel=", "quote-jsonp",
                  "enable-status" ]
         try:
