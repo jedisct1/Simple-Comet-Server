@@ -15,6 +15,8 @@ def _install_reactors():
             exec("from twisted.internet import %s as _reactor" % reactor)
             _reactor.install()
             break
+        except AssertionError:
+            break
         except Exception:
             pass
 
