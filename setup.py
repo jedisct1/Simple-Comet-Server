@@ -7,7 +7,7 @@ except ImportError:
     from distutils.core import setup
     
 CONFIG = {
-    "description": "Simple Comet",
+    "description": "A simple Comet server",
     "version": 0.1,
     "license": "BSD",
     "author": "Frank Denis",
