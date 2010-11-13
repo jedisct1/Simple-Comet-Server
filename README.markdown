@@ -36,6 +36,10 @@ Server switches
 
 Change the HTTP port the server will listen to.
 
+    --unix-socket-path=<path to UNIX socket) (default=none)
+    
+In addition or in place of a TCP port, listen to a local UNIX socket.    
+
     --http-timeout=<HTTP timeout in seconds> (default=30)
 
 Drop inactive connections after this many seconds.
