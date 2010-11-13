@@ -16,7 +16,7 @@ class Config(object):
     
     
     def __init__(self, args):
-        self._http_port = 4080
+        self._http_port = None
         self._http_timeout = 30
         self._unix_socket_path = None
         self._client_session_timeout = 60
@@ -41,9 +41,9 @@ class Config(object):
         print """
 Usage: simple_comet
             
---http-port=<HTTP server port> (default=4080)
---http-timeout=<HTTP timeout in seconds> (default=30)
+--http-port=<HTTP server port> (default=none)
 --unix-socket-path=<path to UNIX socket> (default=none)
+--http-timeout=<HTTP timeout in seconds> (default=30)
 --session-timeout=<session timeout in seconds> (default=60)
 --inactive-channel-timeout=<inactive channel timeout> (default=90)
 --messages-per-channel=<default max messages per channel> (default=100)

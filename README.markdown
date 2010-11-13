@@ -32,9 +32,9 @@ Server switches
 
 `simple_comet`
     
-    --http-port=<HTTP server port> (default=4080)
+    --http-port=<HTTP server port> (default=none)
 
-Change the HTTP port the server will listen to.
+Change the HTTP port the server will listen to. Tests assume port 4080.
 
     --unix-socket-path=<path to UNIX socket) (default=none)
     
