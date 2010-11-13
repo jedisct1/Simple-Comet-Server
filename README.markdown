@@ -181,3 +181,40 @@ channels.
 The callback function will be called every time a watched channel will
 be updated.
 
+
+Using Nginx and local sockets
+-----------------------------
+
+Nginx can proxy to local UNIX sockets. If Nginx and the Comet server
+are hosted on the same server, this is the recommended way to make
+them play well.
+
+Start the Comet server with something like:
+
+    simple-comet --enable-status --unix-socket=/var/tmp/comet.sock
+    
+And define an Nginx virtual host like:
+
+    server {
+      listen 80;
+      server_name comet.example.com;
+      root /var/empty/;
+
+      location / {
+        return 404;
+      }
+      
+      location /subscribe/ {
+        add_header Access-Control-Allow-Origin "*";
+        add_header Access-Control-Allow-Methods "GET, OPTIONS";
+        add_header Access-Control-Allow-Headers "X-Requested-With,Accept,If-Modified-Since,ETag";
+        add_header Access-Control-Max-Age "1728000";
+        
+        proxy_pass http://unix:/var/tmp/comet.sock:/channels/;
+      }
+    }
+    
+`add_headers` are for CORS (cross-domain without JSON-P) requests.
+You don't need these if you only intended to use the provided
+Javascript library.
+
