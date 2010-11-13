@@ -1,26 +1,25 @@
 
-from config import Config
-from twisted.internet import reactor
-
-        
-
-from twisted.web import server
-from comet_server import CometServer
-import sys
-
 def _install_reactors():
-    reactors = [ "kqreactor", "epollreactor", "pollreactor" ]
-    for reactor in reactors:
+    reactors_names = [ "kqreactor", "epollreactor", "pollreactor" ]
+    for reactor_name in reactors_names:
         try:
-            exec("from twisted.internet import %s as _reactor" % reactor)
+            exec("from twisted.internet import %s as _reactor" % reactor_name)
             _reactor.install()
             break
         except AssertionError:
             break
         except Exception:
             pass
+        
 
+from config import Config
+from twisted.web import server
+_install_reactors()
+from twisted.internet import reactor
+from comet_server import CometServer
+import sys
 
+        
 def main():
     args = sys.argv[1: ]
     config = Config(args)
