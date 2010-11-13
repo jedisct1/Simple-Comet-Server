@@ -8,11 +8,11 @@ for reactor_name in reactors_names:
         exec("from twisted.internet import %s as _reactor" % reactor_name)
         _reactor.install()
         break
-        except AssertionError:
-            break
-        except Exception:
-            pass
-        
+    except AssertionError:
+        break
+    except Exception:
+        pass
+    
 from twisted.internet import reactor
 from comet_server import CometServer
 import sys

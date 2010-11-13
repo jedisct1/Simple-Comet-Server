@@ -97,7 +97,7 @@ Usage: simple_comet
         self._unix_socket_path = value
 
 
-    unix_socket_pat = property(lambda self: self._unix_socket_path,
+    unix_socket_path = property(lambda self: self._unix_socket_path,
         set_unix_socket_path)
 
         
