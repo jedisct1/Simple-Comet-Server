@@ -5,7 +5,7 @@ This is a minimalist HTTP long-polling server.
 
 With intentionally no support for Websockets nor Bayeux.
 
-But the client-side Javascript library only weights 534 bytes (gzipped), with
+But the client-side Javascript library only weights 469 bytes (gzipped), with
 support for multiple channels and cross-domain requests.
 
 It should work just fine on most web browsers, including legacy ones and

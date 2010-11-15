@@ -1,4 +1,6 @@
-window['SimpleCometProxy'] = function() {
+window['SimpleComet'] = function() {
+    var queue = [];
+
     var jsonp_cb = '_JSONP_comet_cb',
         min_delay = 100, timeout = 30000, since = 0, seq = 0;
 
@@ -10,7 +12,7 @@ window['SimpleCometProxy'] = function() {
         return node;
     }
 
-    function subscribe(url, cb, client_id) {
+    function online_subscribe(url, cb, client_id) {
         var _url = url + '?since=' + encodeURIComponent(since) +
             '&t=' + (new Date).getTime() + '.' + seq++;
         client_id && (_url += '&client_id=' + encodeURIComponent(client_id));
@@ -37,40 +39,26 @@ window['SimpleCometProxy'] = function() {
         }
     }
 
-    return {
-        'min_delay': min_delay,
-        'timeout': timeout,
-        'subscribe': subscribe
-    };
-}();
-
-window['SimpleComet'] = function() {
-    var frame_src = 'simple-comet-frame.html',
-        queue = [];
-
-    function create_comet_frame() {
-        var node_comet_frame = document.createElement('iframe');
-        node_comet_frame.setAttribute('src', frame_src);
-        node_comet_frame.setAttribute('style', 'display:none');
-        document.body.appendChild(node_comet_frame);
-    }
-
-    function comet_frame_ready_cb(simple_comet_proxy) {
-        this.subscribe = simple_comet_proxy['subscribe'];
+    function comet_ready_cb() {
+        this.subscribe = online_subscribe;
         for (var args; args = queue.shift();) {
             this.subscribe.apply(this, args);
         }
     }
 
     function subscribe(url, cb, client_id) {
-        create_comet_frame && setTimeout(create_comet_frame, 1);
         this.create_comet_frame = null;
         queue.push(arguments);
     }
 
+    function dom_ready() {
+        setTimeout(comet_ready_cb, 1);
+    }
+
     return {
-        'frame_src': frame_src,
-        'comet_frame_ready_cb': comet_frame_ready_cb,
+        'dom_ready': dom_ready,
+        'min_delay': min_delay,
+        'timeout': timeout,
         'subscribe': subscribe
     };
 }();
