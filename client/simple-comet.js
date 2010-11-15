@@ -24,6 +24,7 @@ window['SimpleCometProxy'] = function() {
                 return;
             }
             clearTimeout(cancel_timer);
+            jsonp_node.setAttribute('src', null);
             jsonp_node.parentNode.removeChild(jsonp_node);
             if (resp.since < since) {
                 return;
@@ -62,7 +63,7 @@ window['SimpleComet'] = function() {
     }
 
     function subscribe(url, cb, client_id) {
-        create_comet_frame && create_comet_frame();
+        create_comet_frame && setTimeout(create_comet_frame, 1);
         this.create_comet_frame = null;
         queue.push(arguments);
     }
