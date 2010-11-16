@@ -19,7 +19,7 @@ window['SimpleComet'] = function() {
         var jsonp_node = create_jsonp_node(_url);
         var cancel_timer = setTimeout(function() {
             jsonp_node.parentNode.removeChild(jsonp_node);
-            subscribe(url, cb, client_id);
+            online_subscribe(url, cb, client_id);
         }, timeout);
         window[jsonp_cb] = function(resp) {
             if (resp['return_code'] <= 0) {
@@ -34,7 +34,7 @@ window['SimpleComet'] = function() {
             cb(resp);
             since = resp.last_id;
             setTimeout(function() {
-                subscribe(url, cb, client_id);
+                online_subscribe(url, cb, client_id);
             }, min_delay);
         }
     }
