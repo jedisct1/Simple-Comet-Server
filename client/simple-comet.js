@@ -18,7 +18,8 @@ window['SimpleComet'] = function() {
         client_id && (_url += '&client_id=' + encodeURIComponent(client_id));
         var jsonp_node = create_jsonp_node(_url);
         var cancel_timer = setTimeout(function() {
-            jsonp_node.parentNode.removeChild(jsonp_node);
+            jsonp_node.parentNode &&
+                jsonp_node.parentNode.removeChild(jsonp_node);
             online_subscribe(url, cb, client_id);
         }, timeout);
         window[jsonp_cb] = function(resp) {
