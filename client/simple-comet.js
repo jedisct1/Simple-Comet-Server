@@ -27,7 +27,7 @@ window['SimpleComet'] = function() {
             }
             clearTimeout(cancel_timer);
             jsonp_node.setAttribute('src', null);
-            jsonp_node.parentNode &&            
+            jsonp_node.parentNode &&
                 jsonp_node.parentNode.removeChild(jsonp_node);
             if (resp.since < since) {
                 return;
