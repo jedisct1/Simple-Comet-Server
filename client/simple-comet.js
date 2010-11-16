@@ -51,12 +51,12 @@ window['SimpleComet'] = function() {
         queue.push(arguments);
     }
 
-    function dom_ready() {
+    function start() {
         setTimeout(comet_ready_cb, 1);
     }
 
     return {
-        'dom_ready': dom_ready,
+        'start': start,
         'min_delay': min_delay,
         'timeout': timeout,
         'subscribe': subscribe

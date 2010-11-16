@@ -185,10 +185,10 @@ be updated.
 
 Starting the engine:
 
-    SimpleComet.dom_ready()
+    SimpleComet.start()
     
-Call this function when the DOM is ready. Calls to
-SimpleComet.subscribe() can be made after or before this one.    
+You usually want to call this function when the DOM is ready.
+Calls to SimpleComet.subscribe() can be made after or before this one.
 
 
 Using Nginx and local sockets

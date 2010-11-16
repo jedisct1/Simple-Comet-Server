@@ -48,10 +48,12 @@
     SimpleComet.subscribe(url, message_received);
     
     //
-    // Feel free to replace dom_ready with whatever your JS framework provides.
+    // Feel free to replace dom_ready with whatever your JS framework provides,
+    // or directly call SimpleComet.dom_ready() if you don't mind having the
+    // browser activity indicator spin until the JSON-P data has come.
     // SimpleComet.dom_ready can be called before or after subscribe() calls.
     //
-    dom_ready(SimpleComet.dom_ready);
+    dom_ready(SimpleComet.start);
 })();
 
 // ]]>
