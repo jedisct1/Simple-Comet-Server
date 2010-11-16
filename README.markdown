@@ -173,6 +173,8 @@ Javascript API
 
 The Javascript library (`client/simple-comet.js`) is designed to query a single server, through JSON-P.
 
+Subscribing to channels:
+
     SimpleComet.subscribe(url, callback, client_id)
     
 `client_id` is only required in order to subscribe to non-anonymous
@@ -180,6 +182,13 @@ channels.
 
 The callback function will be called every time a watched channel will
 be updated.
+
+Starting the engine:
+
+    SimpleComet.dom_ready()
+    
+Call this function when the DOM is ready. Calls to
+SimpleComet.subscribe() can be made after or before this one.    
 
 
 Using Nginx and local sockets
