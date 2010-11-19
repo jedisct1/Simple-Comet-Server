@@ -48,7 +48,6 @@ window['SimpleComet'] = function() {
     }
 
     function subscribe(url, cb, client_id) {
-        this.create_comet_frame = null;
         queue.push(arguments);
     }
 
