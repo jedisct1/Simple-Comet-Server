@@ -31,9 +31,9 @@ class Channel(object):
         message = { "id": message_id, "ts": int(time.time()),
                     "content": content }
         while len(self.messages) >= self.max_messages:
-            self.messages.pop()
+            self.messages.popleft()
         
-        self.messages.appendleft(message)
+        self.messages.append(message)
 
         
     def messages_since(self, message_id):
