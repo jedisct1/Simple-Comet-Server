@@ -8,7 +8,7 @@ except ImportError:
     
 CONFIG = {
     "description": "A simple Comet server",
-    "version": 0.2,
+    "version": 0.3,
     "license": "BSD",
     "author": "Frank Denis",
     "author_email": "j at pureftpd dot org",    
