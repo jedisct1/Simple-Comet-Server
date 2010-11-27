@@ -14,7 +14,7 @@ CONFIG = {
     "author_email": "j at pureftpd dot org",    
     "url": "https://github.com/jedisct1/Simple-Comet-Server",
     "download_url": "https://github.com/jedisct1/Simple-Comet-Server",
-    "install_requires": [ "nose", "twisted" ],
+    "install_requires": [ "nose", "twisted", "simplejson" ],
     "packages": [ "simple_comet" ],
     "scripts": [ "bin/simple_comet" ],
     "name": "simple_comet"
