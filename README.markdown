@@ -224,6 +224,5 @@ And define an Nginx virtual host like:
     }
     
 `add_headers` are for CORS (cross-domain without JSON-P) requests.
-You don't need these if you only intended to use the provided
-Javascript library.
+You don't need these if you only intend to use the provided Javascript library.
 
