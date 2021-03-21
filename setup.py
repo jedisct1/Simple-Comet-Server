@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 try:
     from setuptools import setup
@@ -8,7 +8,7 @@ except ImportError:
 
 CONFIG = {
     "description": "A simple Comet server",
-    "version": 0.3,
+    "version": 0.4,
     "license": "BSD",
     "author": "Frank Denis",
     "author_email": "j at pureftpd dot org",
