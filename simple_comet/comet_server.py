@@ -1,7 +1,6 @@
 import time
 from twisted.web import resource
 from twisted.web.server import NOT_DONE_YET
-from .config import Config
 from .connection import Connection
 from .client_channel import ClientChannel, ExistingChannelError, ExistingClientError
 from .held_connection_channel import HeldConnectionChannel
@@ -39,7 +38,7 @@ class CometServer(resource.Resource):
             return connection.error(-1, str(e))
 
         if not channel_id:
-            if not b"channel_id" in request.args:
+            if b"channel_id" not in request.args:
                 return connection.error(-1, "Missing channel id")
 
             (channel_id,) = request.args[b"channel_id"]
@@ -71,7 +70,7 @@ class CometServer(resource.Resource):
         except KeyError:
             return connection.error(-2, "Nonexistent channel")
 
-        if not b"content" in request.args:
+        if b"content" not in request.args:
             return connection.error(-1, "Missing content")
 
         (content,) = request.args[b"content"]
@@ -155,7 +154,7 @@ class CometServer(resource.Resource):
 
             since = min(since, self._current_message_id)
 
-        if not b"client_id" in request.args:
+        if b"client_id" not in request.args:
             client_id = None
             client = None
         else:
@@ -178,7 +177,7 @@ class CometServer(resource.Resource):
             except KeyError:
                 continue
 
-            if channel.use_sessions != False and client_id == None:
+            if channel.use_sessions is True and client_id is None:
                 continue
 
             authorized_channels_ids.append(channel_id)
@@ -256,7 +255,7 @@ class CometServer(resource.Resource):
 
     def register_client(self, connection):
         request = connection.request
-        if not b"client_id" in request.args:
+        if b"client_id" not in request.args:
             return connection.error(-1, "Missing client id")
         (client_id,) = request.args[b"client_id"]
         client_id = client_id.decode("utf-8")

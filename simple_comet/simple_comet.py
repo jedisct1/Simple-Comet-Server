@@ -21,10 +21,10 @@ def main():
     config = Config(args)
     comet_server = CometServer(config)
     site = server.Site(comet_server, timeout=config.http_timeout)
-    if config.http_port != None:
+    if config.http_port is not None:
         reactor.listenTCP(config.http_port, site)
 
-    if config.unix_socket_path != None:
+    if config.unix_socket_path is not None:
         reactor.listenUNIX(config.unix_socket_path, site)
 
     reactor.run()

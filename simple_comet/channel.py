@@ -1,4 +1,3 @@
-from .config import Config
 import time
 from collections import deque
 from twisted.internet import reactor
@@ -39,7 +38,10 @@ class Channel(object):
         self.cancel_timeout_delayed_call()
 
     def cancel_timeout_delayed_call(self):
-        if self._timeout_delayed_call != None and self._timeout_delayed_call.active():
+        if (
+            self._timeout_delayed_call is not None
+            and self._timeout_delayed_call.active()
+        ):
             self._timeout_delayed_call.cancel()
 
         self._timeout_delayed_call = None

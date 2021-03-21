@@ -1,4 +1,3 @@
-from .config import Config
 from wsgiref.handlers import format_date_time
 from datetime import datetime, timedelta
 from time import mktime
