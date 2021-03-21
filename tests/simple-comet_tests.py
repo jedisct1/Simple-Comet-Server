@@ -1,7 +1,8 @@
 
 from nose.tools import *
-import urllib
-import urllib2
+import urllib.request
+import urllib.error
+import urllib.parse
 try:
     import json
 except ImportError:
@@ -24,17 +25,17 @@ def _issue_command(uri_part, data, cb, method=None):
         if not method:
             method = "POST"
 
-        _data = urllib.urlencode(data)
-        request = urllib2.Request(url=BASE_URI + uri_part, data=_data)
+        _data = urllib.parse.urlencode(data).encode("utf-8")
+        request = urllib.request.Request(url=BASE_URI + uri_part, data=_data)
         request.add_header("Content-Type", "application/x-www-form-urlencoded")
     else:
         if not method:
             method = "GET"
 
-        request = urllib2.Request(url=BASE_URI + uri_part)
+        request = urllib.request.Request(url=BASE_URI + uri_part)
 
     request.get_method = lambda: method
-    st = urllib2.urlopen(request)
+    st = urllib.request.urlopen(request)
     res = json.loads(st.read())
     print(res)
     cb(res)
