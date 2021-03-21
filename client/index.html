@@ -1,62 +1,65 @@
 <!doctype html>
 <html lang=en>
+
 <head>
   <meta charset=utf-8 />
   <title>Simple Comet Test</title>
 </head>
+
 <body>
   <script src="simple-comet.js"></script>
   <script>
-// <![CDATA[
+    // <![CDATA[
 
-(function() {
-    //
-    // Poorman's dom_ready, useless if you already have one.
-    //
-    function null_function() { }
-    
-    function dom_ready(cb) {
+    (function () {
+      //
+      // Poorman's dom_ready, useless if you already have one.
+      //
+      function null_function() { }
+
+      function dom_ready(cb) {
         function dom_ready_cb() {
-            dom_ready_cb = null_function;
-            cb();
+          dom_ready_cb = null_function;
+          cb();
         }
         document.addEventListener('DOMContentLoaded', dom_ready_cb, false);
         var previous_onload = window.onload;
-        window.onload = function() {
-            dom_ready_cb();
-            previous_onload && previous_onload();
+        window.onload = function () {
+          dom_ready_cb();
+          previous_onload && previous_onload();
         }
-    }    
-    
-    //
-    // Called every time a new message is received.
-    // 
-    function message_received(message) {
+      }
+
+      //
+      // Called every time a new message is received.
+      //
+      function message_received(message) {
         var node_p = document.createElement('p');
         node_p.appendChild(document.createTextNode(JSON.stringify(message)));
-        document.body.appendChild(node_p);        
-    }
-    
-    //
-    // Start the server with --http-port=4080
-    // and register the "chan" and "test" channels.
-    // 
-    var channels = ['chan', 'test'],
+        document.body.appendChild(node_p);
+      }
+
+      //
+      // Start the server with --http-port=4080
+      // and register the "chan" and "test" channels.
+      //
+      var channels = ['chan', 'test'],
         url = 'http://localhost:4080/channels/' +
-        channels.join(encodeURIComponent('|')) + '.jsonp';
-    
-    SimpleComet.subscribe(url, message_received);
-    
-    //
-    // Feel free to replace dom_ready with whatever your JS framework provides,
-    // or directly call SimpleComet.dom_ready() if you don't mind having the
-    // browser activity indicator spin until the JSON-P data has come.
-    // SimpleComet.dom_ready can be called before or after subscribe() calls.
-    //
-    dom_ready(SimpleComet.start);
-})();
+          channels.join(encodeURIComponent('|')) + '.jsonp';
+
+      SimpleComet.subscribe(url, message_received);
+
+      //
+      // Feel free to replace dom_ready with whatever your JS framework provides,
+      // or directly call SimpleComet.dom_ready() if you don't mind having the
+      // browser activity indicator spin until the JSON-P data has come.
+      // SimpleComet.dom_ready can be called before or after subscribe() calls.
+      //
+      dom_ready(SimpleComet.start);
+    })();
 
 // ]]>
   </script>
 </body>
+
 </html>
