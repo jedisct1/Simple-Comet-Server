@@ -19,26 +19,28 @@ The server requires Python 3 and the Twisted framework.
 
 It can be installed the boring way:
 
-    git clone git://github.com/jedisct1/Simple-Comet-Server.git
-    cd Simple-Comet-Server
-    sudo python setup.py install    
-    
+```sh
+git clone git://github.com/jedisct1/Simple-Comet-Server.git
+cd Simple-Comet-Server
+sudo python setup.py install
+```
+
 Using simple_comet as a backend for a frontend server like Nginx is
 highly recommended.
-    
+
 
 Server switches
 ---------------
 
 `simple_comet`
-    
+
     --http-port=<HTTP server port> (default=none)
 
 Change the HTTP port the server will listen to. Tests assume port 4080.
 
     --unix-socket-path=<path to UNIX socket) (default=none)
-    
-In addition or in place of a TCP port, listen to a local UNIX socket.    
+
+In addition or in place of a TCP port, listen to a local UNIX socket.
 
     --http-timeout=<HTTP timeout in seconds> (default=30)
 
@@ -53,11 +55,11 @@ Clear sessions after this many seconds.
 Remove channels with no clients after this many seconds.
 
     --messages-per-channel=<default max messages per channel> (default=100)
-    
+
 The default number of messages to keep in every channel. When the
 queue is full, the oldest message will get dropped in order to make
 space for new messages.
-    
+
     --quote-json
 
 Encapsulate JSON responses with `/*-secure- ... */` comments.
@@ -90,8 +92,8 @@ client.
     channel_id=(name of the new channel)
     use_sessions=1: only registered clients can join the channel
     max_messages=(non-default number of retained messages)
-    
-  
+
+
 * **Pushing data to a channel**
 
 Store a new message and forward it to subscribers.
@@ -133,12 +135,13 @@ This should be sent by your server-side application.
     Query string:
     client_id=(client identifier): only required for non-anonymous channels
     since=(identifier of the last read frame)
-   
+
 Multiple channels can be subscribed to, and anonymous and non-anonymous
 channels can be mixed. Just use a pipe (`%7C`) as a delimiter.
 
 The reply looks like:
 
+```json
     { "since": 0,
       "messages": {
         "channelA": [
@@ -156,12 +159,13 @@ The reply looks like:
             "id": 128916015846786,
             "ts": 1289160235
           }
-        ]        
+        ]
       },
       "return_code": 1,
       "error_message": "",
       "last_id": 128916015846785
     }
+```
 
 `last_id` is the identifier of the last frame. The following request
 should include it as the value for `since`.
@@ -182,8 +186,10 @@ The Javascript library (`client/simple-comet.js`) is designed to query a single 
 
 Subscribing to channels:
 
-    SimpleComet.subscribe(url, callback, client_id)
-    
+```js
+SimpleComet.subscribe(url, callback, client_id)
+```
+
 `client_id` is only required in order to subscribe to non-anonymous
 channels.
 
@@ -192,8 +198,10 @@ be updated.
 
 Starting the engine:
 
-    SimpleComet.start()
-    
+```js
+SimpleComet.start()
+```
+
 You usually want to call this function when the DOM is ready.
 Calls to SimpleComet.subscribe() can be made after or before this one.
 
@@ -208,7 +216,7 @@ them play well.
 Start the Comet server with something like:
 
     simple-comet --enable-status --unix-socket=/var/tmp/comet.sock
-    
+
 And define an Nginx virtual host like:
 
     server {
@@ -219,17 +227,17 @@ And define an Nginx virtual host like:
       location / {
         return 404;
       }
-      
+
       location /subscribe/ {
         add_header Access-Control-Allow-Origin "*";
         add_header Access-Control-Allow-Methods "GET, OPTIONS";
         add_header Access-Control-Allow-Headers "X-Requested-With,Accept,If-Modified-Since,ETag";
         add_header Access-Control-Max-Age "1728000";
-        
+
         proxy_pass http://unix:/var/tmp/comet.sock:/channels/;
       }
     }
-    
+
 `add_headers` are for CORS (cross-domain without JSON-P) requests.
 You don't need these if you only intend to use the provided Javascript library.
 
