@@ -3,8 +3,7 @@ from twisted.web import resource
 from twisted.web.server import NOT_DONE_YET
 from .config import Config
 from .connection import Connection
-from .client_channel import ClientChannel, \
-    ExistingChannelError, ExistingClientError
+from .client_channel import ClientChannel, ExistingChannelError, ExistingClientError
 from .held_connection_channel import HeldConnectionChannel
 
 
@@ -19,8 +18,7 @@ class CometServer(resource.Resource):
         self._config = config
         self.client_channel = ClientChannel(config)
         self.held_connection_channel = HeldConnectionChannel()
-        self._current_message_id = int(
-            time.time() * config.max_messages_per_second)
+        self._current_message_id = int(time.time() * config.max_messages_per_second)
         self._current_connection_id = 0
         self.comet_server = self
 
@@ -54,17 +52,19 @@ class CometServer(resource.Resource):
                 try:
                     max_messages = int(request.args[b"max_messages"][0])
                     if max_messages < 1:
-                        raise ValueError(
-                            "Channels should at least store one message")
+                        raise ValueError("Channels should at least store one message")
 
                 except ValueError:
                     return connection.error(-1, "Invalid max messages value")
             else:
                 max_messages = self.config.default_max_messages_per_channel
 
-            return self.register_channel_id(connection=connection,
-                                            channel_id=channel_id, max_messages=max_messages,
-                                            use_sessions=use_sessions)
+            return self.register_channel_id(
+                connection=connection,
+                channel_id=channel_id,
+                max_messages=max_messages,
+                use_sessions=use_sessions,
+            )
 
         try:
             channel = self.client_channel.channel_id_to_channel(channel_id)
@@ -79,17 +79,21 @@ class CometServer(resource.Resource):
         message_id = self.pop_message_id()
         channel.push_message_content(message_id, content)
         held_connections = self.held_connection_channel.channel_id_to_held_connections(
-            channel_id)
+            channel_id
+        )
         new_messages = channel.messages_since(self.current_message_id - 1)
         channels_messages = {channel_id: new_messages}
         for held_connection in held_connections:
-            result = held_connection.success({"messages": channels_messages,
-                                              "since": held_connection.meta["since"],
-                                              "last_id": self.current_message_id})
+            result = held_connection.success(
+                {
+                    "messages": channels_messages,
+                    "since": held_connection.meta["since"],
+                    "last_id": self.current_message_id,
+                }
+            )
             held_connection.send_cache_headers()
             held_connection.delayed_reply(result)
-            self.held_connection_channel.remove_held_connection_id(
-                held_connection.id)
+            self.held_connection_channel.remove_held_connection_id(held_connection.id)
 
         return connection.success({"message_id": message_id})
 
@@ -128,9 +132,9 @@ class CometServer(resource.Resource):
 
         removed = self.remove_channel_id(channel_id)
 
-        return connection.success({"channel_id": channel_id,
-                                   "removed": removed},
-                                  return_code=int(removed) + 1)
+        return connection.success(
+            {"channel_id": channel_id, "removed": removed}, return_code=int(removed) + 1
+        )
 
     def pop_message_id(self):
         self._current_message_id = self._current_message_id + 1
@@ -181,7 +185,8 @@ class CometServer(resource.Resource):
 
             if client_id:
                 self.client_channel.register_client_id_for_channel_id(
-                    client_id, channel_id)
+                    client_id, channel_id
+                )
 
         channels_messages = dict()
         empty = True
@@ -199,14 +204,18 @@ class CometServer(resource.Resource):
 
         if not empty:
             connection.send_cache_headers()
-            return connection.success({"messages": channels_messages,
-                                       "since": since,
-                                       "last_id": self.current_message_id})
+            return connection.success(
+                {
+                    "messages": channels_messages,
+                    "since": since,
+                    "last_id": self.current_message_id,
+                }
+            )
 
         connection.meta = {"since": since}
-        self.held_connection_channel. \
-            register_held_connection_for_channels_ids(
-                connection, authorized_channels_ids)
+        self.held_connection_channel.register_held_connection_for_channels_ids(
+            connection, authorized_channels_ids
+        )
 
         request.notifyFinish().addBoth(self.connection_finished, connection.id)
 
@@ -218,7 +227,8 @@ class CometServer(resource.Resource):
     def register_channel_id(self, connection, channel_id, max_messages, use_sessions):
         try:
             self.client_channel.register_channel_id(
-                channel_id, max_messages, use_sessions)
+                channel_id, max_messages, use_sessions
+            )
         except ExistingChannelError as e:
             return connection.error(-2, str(e))
 
@@ -234,9 +244,11 @@ class CometServer(resource.Resource):
         return True
 
     def client_timeout_cb(self, client, teardown_cb):
-        _empty_channels_ids = \
+        _empty_channels_ids = (
             self.client_channel.remove_client_id_and_return_empty_channels_ids(
-                client.id)
+                client.id
+            )
+        )
         teardown_cb()
 
     def register_client(self, connection):
@@ -248,7 +260,8 @@ class CometServer(resource.Resource):
 
         try:
             self.client_channel.register_client_id(
-                self, client_id, self.client_timeout_cb)
+                self, client_id, self.client_timeout_cb
+            )
         except ExistingClientError as e:
             return connection.error(-2, str(e))
 
@@ -259,7 +272,10 @@ class CometServer(resource.Resource):
         clients = self.client_channel.client_id_to_channel_id_to_channels_ids
         held_connections_count = self.held_connection_channel.held_connections_count
 
-        status = {"channels": list(channels.keys()), "clients": list(clients.keys()),
-                  "held_connections_count": held_connections_count}
+        status = {
+            "channels": list(channels.keys()),
+            "clients": list(clients.keys()),
+            "held_connections_count": held_connections_count,
+        }
 
         return connection.success({"status": status})

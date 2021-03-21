@@ -1,8 +1,8 @@
-
 from nose.tools import *
 import urllib.request
 import urllib.error
 import urllib.parse
+
 try:
     import json
 except ImportError:
@@ -44,71 +44,68 @@ def _issue_command(uri_part, data, cb, method=None):
 
 def test_register_channel():
     def _(res):
-        assert(res["return_code"] > 0)
-        assert(res["channel_id"] == "chan")
+        assert res["return_code"] > 0
+        assert res["channel_id"] == "chan"
 
     _issue_command("/channels.json", {"channel_id": "chan"}, _)
 
 
 def test_register_channel_with_sessions():
     def _(res):
-        assert(res["return_code"] > 0)
-        assert(res["channel_id"] == "chan-sess")
+        assert res["return_code"] > 0
+        assert res["channel_id"] == "chan-sess"
 
-    _issue_command("/channels.json",
-                   {"channel_id": "chan-sess", "use_sessions": 1}, _)
+    _issue_command("/channels.json", {"channel_id": "chan-sess", "use_sessions": 1}, _)
 
 
 def test_push_content():
     def _(res):
-        assert(res["return_code"] > 0)
+        assert res["return_code"] > 0
 
-    _issue_command("/channels/chan.json",
-                   {"content": "test"}, _)
+    _issue_command("/channels/chan.json", {"content": "test"}, _)
 
 
 def test_read_content():
     def _(res):
-        assert(res["return_code"] > 0)
-        assert(res["since"] == 0)
+        assert res["return_code"] > 0
+        assert res["since"] == 0
 
     _issue_command("/channels/chan.json", None, _)
 
 
 def test_push_sess_content():
     def _(res):
-        assert(res["return_code"] > 0)
+        assert res["return_code"] > 0
 
-    _issue_command("/channels/chan-sess.json",
-                   {"content": "test-sess"}, _)
+    _issue_command("/channels/chan-sess.json", {"content": "test-sess"}, _)
 
 
 def test_read_unbound_sess_content():
     def _(res):
-        assert(res["return_code"] < 0)
+        assert res["return_code"] < 0
 
     _issue_command("/channels/chan-sess.json?client_id=nonexistent", None, _)
 
 
 def test_register_client_id():
     def _(res):
-        assert(res["return_code"] > 0)
-        assert(res["client_id"] == "cid")
+        assert res["return_code"] > 0
+        assert res["client_id"] == "cid"
 
     _issue_command("/clients.json", {"client_id": "cid"}, _)
 
 
 def test_read_sess_content():
     def _(res):
-        assert(res["return_code"] > 0)
+        assert res["return_code"] > 0
 
     _issue_command("/channels/chan-sess.json?client_id=cid", None, _)
 
 
 def test_delete_chan():
     def _(res):
-        assert(res["return_code"] > 0)
-        assert(res["removed"] == True)
+        assert res["return_code"] > 0
+        assert res["removed"] == True
 
     _issue_command("/channels/chan.json", None, _, "DELETE")
     _issue_command("/channels/chan-sess.json", None, _, "DELETE")
@@ -116,7 +113,7 @@ def test_delete_chan():
 
 def test_delete_nonexistent_chan():
     def _(res):
-        assert(res["return_code"] > 0)
-        assert(res["removed"] == False)
+        assert res["return_code"] > 0
+        assert res["removed"] == False
 
     _issue_command("/channels/nonexistent.json", None, _, "DELETE")

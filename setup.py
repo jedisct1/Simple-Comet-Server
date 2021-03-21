@@ -17,7 +17,7 @@ CONFIG = {
     "install_requires": ["nose", "twisted", "simplejson"],
     "packages": ["simple_comet"],
     "scripts": ["bin/simple_comet"],
-    "name": "simple_comet"
+    "name": "simple_comet",
 }
 
 setup(**CONFIG)

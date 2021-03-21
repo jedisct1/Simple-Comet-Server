@@ -18,16 +18,18 @@ class Client(object):
 
     def ping(self):
         config = self.comet_server.config
-        if self._timeout_delayed_call == None or \
-                not self._timeout_delayed_call.active():
-            self._timeout_delayed_call = \
-                reactor.callLater(config.client_session_timeout, self.timeout)
+        if (
+            self._timeout_delayed_call == None
+            or not self._timeout_delayed_call.active()
+        ):
+            self._timeout_delayed_call = reactor.callLater(
+                config.client_session_timeout, self.timeout
+            )
         else:
             self._timeout_delayed_call.reset(config.client_session_timeout)
 
     def cancel_timeout_delayed_call(self):
-        if self._timeout_delayed_call != None and \
-                self._timeout_delayed_call.active():
+        if self._timeout_delayed_call != None and self._timeout_delayed_call.active():
             self._timeout_delayed_call.cancel()
 
         self._timeout_delayed_call = None

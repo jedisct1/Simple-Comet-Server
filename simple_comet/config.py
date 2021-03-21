@@ -22,10 +22,16 @@ class Config(object):
         self._max_messages_per_second = 100000
         self._quote_json = False
         self._enable_status = False
-        opts = ["http-port=", "http-timeout=", "unix-socket-path=",
-                "session-timeout=", "inactive-channel-timeout=",
-                "max-messages-per-channel=", "quote-json",
-                "enable-status"]
+        opts = [
+            "http-port=",
+            "http-timeout=",
+            "unix-socket-path=",
+            "session-timeout=",
+            "inactive-channel-timeout=",
+            "max-messages-per-channel=",
+            "quote-json",
+            "enable-status",
+        ]
         try:
             optlist, args = getopt(args, list(), opts)
         except GetoptError:
@@ -35,7 +41,8 @@ class Config(object):
             self.parse_opt(opt)
 
     def help(self):
-        print("""
+        print(
+            """
 Usage: simple_comet
             
 --http-port=<HTTP server port> (default=none)
@@ -46,7 +53,8 @@ Usage: simple_comet
 --messages-per-channel=<default max messages per channel> (default=100)
 --quote-json
 --enable-status
-""")
+"""
+        )
         sys.exit(0)
 
     def parse_opt(self, opt):
@@ -68,60 +76,58 @@ Usage: simple_comet
         elif switch == "--enable-status":
             self.enable_status = True
         else:
-            assert(False)
+            assert False
 
     def set_http_port(self, value):
-        assert(value in range(0, 65536))
+        assert value in range(0, 65536)
         self._http_port = value
 
     http_port = property(lambda self: self._http_port, set_http_port)
 
     def set_http_timeout(self, value):
-        assert(value > 0)
+        assert value > 0
         self._http_timeout = value
 
-    http_timeout = property(lambda self: self._http_timeout,
-                            set_http_timeout)
+    http_timeout = property(lambda self: self._http_timeout, set_http_timeout)
 
     def set_unix_socket_path(self, value):
-        assert(value)
+        assert value
         self._unix_socket_path = value
 
-    unix_socket_path = property(lambda self: self._unix_socket_path,
-                                set_unix_socket_path)
+    unix_socket_path = property(
+        lambda self: self._unix_socket_path, set_unix_socket_path
+    )
 
     def set_client_session_timeout(self, value):
-        assert(value > 0)
+        assert value > 0
         self._client_session_timeout = value
 
-    client_session_timeout = \
-        property(lambda self: self._client_session_timeout,
-                 set_client_session_timeout)
+    client_session_timeout = property(
+        lambda self: self._client_session_timeout, set_client_session_timeout
+    )
 
     def set_inactive_channel_timeout(self, value):
-        assert(value > 0)
+        assert value > 0
         self._inactive_channel_timeout = value
 
-    inactive_channel_timeout = \
-        property(lambda self: self._inactive_channel_timeout,
-                 set_inactive_channel_timeout)
+    inactive_channel_timeout = property(
+        lambda self: self._inactive_channel_timeout, set_inactive_channel_timeout
+    )
 
     def set_max_messages_per_second(self, value):
-        assert(value > 0)
+        assert value > 0
         self._max_messages_per_second = value
 
-    max_messages_per_second = \
-        property(lambda self: self._max_messages_per_second,
-                 set_max_messages_per_second)
+    max_messages_per_second = property(
+        lambda self: self._max_messages_per_second, set_max_messages_per_second
+    )
 
     def set_quote_json(self, value):
         self._quote_json = value
 
-    quote_json = property(lambda self: self._quote_json,
-                          set_quote_json)
+    quote_json = property(lambda self: self._quote_json, set_quote_json)
 
     def set_enable_status(self, value):
         self._enable_status = value
 
-    enable_status = property(lambda self: self._enable_status,
-                             set_enable_status)
+    enable_status = property(lambda self: self._enable_status, set_enable_status)

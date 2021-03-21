@@ -18,19 +18,23 @@ class ClientChannel(object):
         self._channel_id_to_clients_ids = dict()
         self._client_id_to_channels_ids = dict()
 
-    channel_id_to_clients_ids = \
-        property(lambda self: self._channel_id_to_clients_ids)
+    channel_id_to_clients_ids = property(lambda self: self._channel_id_to_clients_ids)
 
-    client_id_to_channel_id_to_channels_ids = \
-        property(lambda self: self._client_id_to_channels_ids)
+    client_id_to_channel_id_to_channels_ids = property(
+        lambda self: self._client_id_to_channels_ids
+    )
 
     def register_channel_id(self, channel_id, max_messages, use_sessions):
         if channel_id in self._channel_id_to_channel:
             raise ExistingChannelError("Channel already exists")
 
-        channel = Channel(id=channel_id, max_messages=max_messages,
-                          timeout=self._config.inactive_channel_timeout,
-                          timeout_cb=self.channel_timeout_cb, use_sessions=use_sessions)
+        channel = Channel(
+            id=channel_id,
+            max_messages=max_messages,
+            timeout=self._config.inactive_channel_timeout,
+            timeout_cb=self.channel_timeout_cb,
+            use_sessions=use_sessions,
+        )
         self._channel_id_to_channel[channel_id] = channel
         self._channel_id_to_clients_ids[channel_id] = set()
 
@@ -38,8 +42,9 @@ class ClientChannel(object):
         if client_id in self._client_id_to_client:
             raise ExistingClientError("Client already exists")
 
-        client = Client(comet_server=comet_server,
-                        id=client_id, timeout_cb=timeout_cb, meta=None)
+        client = Client(
+            comet_server=comet_server, id=client_id, timeout_cb=timeout_cb, meta=None
+        )
         self._client_id_to_client[client_id] = client
         self._client_id_to_channels_ids[client_id] = set()
 
@@ -79,8 +84,10 @@ class ClientChannel(object):
             channel.teardown()
 
     def channel_timeout_cb(self, channel_id, teardown_cb):
-        if channel_id in self._channel_id_to_clients_ids and \
-                self._channel_id_to_clients_ids[channel_id]:
+        if (
+            channel_id in self._channel_id_to_clients_ids
+            and self._channel_id_to_clients_ids[channel_id]
+        ):
             return
 
         self.remove_channel_id(channel_id)
