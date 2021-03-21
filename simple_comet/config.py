@@ -24,7 +24,7 @@ class Config(object):
         self._enable_status = False
         opts = ["http-port=", "http-timeout=", "unix-socket-path=",
                 "session-timeout=", "inactive-channel-timeout=",
-                "max-messages-per-channel=", "quote-jsonp",
+                "max-messages-per-channel=", "quote-json",
                 "enable-status"]
         try:
             optlist, args = getopt(args, list(), opts)
