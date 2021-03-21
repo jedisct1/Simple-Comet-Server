@@ -1,6 +1,3 @@
+from .simple_comet import main
 
-from simple_comet import main
-
-
-__all__ = [ "main" ]
-    
+__all__ = ["main"]
