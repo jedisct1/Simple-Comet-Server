@@ -1,4 +1,4 @@
-window['SimpleComet'] = function() {
+window['SimpleComet'] = function () {
     var queue = [];
 
     var jsonp_cb = '_JSONP_comet_cb',
@@ -17,11 +17,11 @@ window['SimpleComet'] = function() {
             '&t=' + (new Date).getTime() + '.' + seq++;
         client_id && (_url += '&client_id=' + encodeURIComponent(client_id));
         var jsonp_node = create_jsonp_node(_url);
-        var cancel_timer = setTimeout(function() {
+        var cancel_timer = setTimeout(function () {
             jsonp_node.parentNode.removeChild(jsonp_node);
             online_subscribe(url, cb, client_id);
         }, timeout);
-        window[jsonp_cb] = function(resp) {
+        window[jsonp_cb] = function (resp) {
             if (resp['return_code'] <= 0) {
                 return;
             }
@@ -34,7 +34,7 @@ window['SimpleComet'] = function() {
             }
             cb(resp);
             since = resp.last_id;
-            setTimeout(function() {
+            setTimeout(function () {
                 online_subscribe(url, cb, client_id);
             }, min_delay);
         }
