@@ -188,6 +188,9 @@ class CometServer(resource.Resource):
                     client_id, channel_id
                 )
 
+        if not authorized_channels_ids:
+            return connection.error(-2, "No valid channels")
+
         channels_messages = dict()
         empty = True
 
