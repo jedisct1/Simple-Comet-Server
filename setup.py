@@ -11,7 +11,7 @@ CONFIG = {
     "version": 0.4,
     "license": "BSD",
     "author": "Frank Denis",
-    "author_email": "j at pureftpd dot org",
+    "author_email": "pypi@pureftpd.org",
     "url": "https://github.com/jedisct1/Simple-Comet-Server",
     "download_url": "https://github.com/jedisct1/Simple-Comet-Server",
     "install_requires": ["nose", "twisted", "simplejson"],
