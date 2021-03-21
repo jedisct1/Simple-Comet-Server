@@ -29,7 +29,7 @@ class Connection(object):
         path = urllib.parse.unquote(self._request.path).encode("utf-8")
         channels_uri_path = self.comet_server.config.channels_uri_path
         if not path.startswith(channels_uri_path):
-            raise ValueError("Missing %r prefix" % channels_uri_path)
+            raise ValueError("Missing %r prefix" % channels_uri_path.decode("utf-8"))
 
         channel_id_and_format_s = path[len(channels_uri_path) :]
         if channel_id_and_format_s.endswith(b".json"):
