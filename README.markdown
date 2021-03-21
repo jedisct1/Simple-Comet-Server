@@ -167,6 +167,13 @@ The reply looks like:
 should include it as the value for `since`.
 The first request may omit this or use 0.
 
+* **Deleting a channel**
+
+Send a `DELETE` query to the channel URI:
+
+    Method: DELETE
+    URI: http://$HOST:$PORT/channels/(channel name).json
+
 
 Javascript API
 --------------
