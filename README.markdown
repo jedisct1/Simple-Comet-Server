@@ -38,7 +38,7 @@ Server switches
 
 Change the HTTP port the server will listen to. Tests assume port 4080.
 
-    --unix-socket-path=<path to UNIX socket) (default=none)
+    --unix-socket-path=<path to UNIX socket> (default=none)
 
 In addition or in place of a TCP port, listen to a local UNIX socket.
 
@@ -66,7 +66,7 @@ Encapsulate JSON responses with `/*-secure- ... */` comments.
 
     --enable-status
 
-Enable /stats.json in order to monitor activity.
+Enable /status.json in order to monitor activity.
 
 
 REST API
@@ -215,7 +215,7 @@ them play well.
 
 Start the Comet server with something like:
 
-    simple-comet --enable-status --unix-socket=/var/tmp/comet.sock
+    simple_comet --enable-status --unix-socket-path=/var/tmp/comet.sock
 
 And define an Nginx virtual host like:
 

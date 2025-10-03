@@ -69,7 +69,7 @@ Usage: simple_comet
             self.client_session_timeout = int(arg)
         elif switch == "--inactive-channel-timeout":
             self.inactive_channel_timeout = int(arg)
-        elif switch == "--max-messages_per_channel":
+        elif switch == "--max-messages-per-channel":
             self.default_max_messages_per_channel = int(arg)
         elif switch == "--quote-json":
             self.quote_json = True
