@@ -1,0 +1,3 @@
+nose
+twisted
+simplejson
